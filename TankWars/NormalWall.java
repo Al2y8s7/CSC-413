@@ -1,5 +1,6 @@
 package TankWars;
 
+import java.awt.image.BufferedImage;
 import java.util.Observable;
 
 /**
@@ -7,6 +8,10 @@ import java.util.Observable;
  * @author Alnguye
  */
 public class NormalWall extends GameObject {
+
+    public NormalWall(int x, int y, BufferedImage image) {
+        super(x,y,image);
+    }
     @Override
     public void collide(GameObject gameObject){
         
@@ -29,11 +34,6 @@ public class NormalWall extends GameObject {
     
     @Override
     public void collide(PowerUp powerUp){
-        
-    }
-    
-    @Override
-    public void update(Observable o, Object obj){
         
     }
     

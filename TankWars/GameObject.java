@@ -1,7 +1,7 @@
 package TankWars;
+import java.awt.image.BufferedImage;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.*;
 
 /**
  *
@@ -13,18 +13,36 @@ import java.util.*;
  * isVisible, Collidable, Update, getCoordinates, setCoordinates
  */
 
-public abstract class GameObject extends Observable implements Observer {
+public abstract class GameObject{
 
+    BufferedImage content;
+    protected int x, y;
     
     //constructor
-    public GameObject(){
-        
+    public GameObject(int x, int y, BufferedImage Image){
+        this.content = Image;
+        this.x = x;
+        this.y = y;
     }
     
     public boolean isVisible(){
         return true;
     }
-    
+     public BufferedImage getImage(){
+        return this.content;
+    }
+    public void setX(int x){
+        this.x = x;
+    }
+    public void setY(int y){
+        this.y = y;
+    }
+    public int getX(){
+        return this.x;
+    }
+    public int getY(){
+        return this.y;
+    }
     public abstract void collide(GameObject gameObject);
     
     public abstract void collide(Tank tank);

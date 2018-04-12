@@ -1,5 +1,6 @@
 package TankWars;
 
+import java.awt.image.BufferedImage;
 import java.util.Observable;
 
 /**
@@ -9,8 +10,8 @@ import java.util.Observable;
  */
 public class PowerUp extends GameObject {
     //constructor
-    public PowerUp(){
-        
+    public PowerUp(int x, int y, BufferedImage image){
+        super(x,y,image);
     }
     @Override
     public void collide(GameObject gameObject){
@@ -36,12 +37,6 @@ public class PowerUp extends GameObject {
     public void collide(PowerUp powerUp){
         
     }
-    
-    @Override
-    public void update(Observable o, Object obj){
-        
-    }
-    
     public int getTarget(){
         return 0;
     }

@@ -1,12 +1,21 @@
 package TankWars;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author Alnguye 3/21/18
  */
-public class Movable extends GameObject {
+public abstract class Movable extends GameObject{
+    
+        
+    public Movable(int x, int y, BufferedImage image) {
+        super(x,y,image);
+    }
 
     @Override
     public void collide(GameObject gameObject) {
@@ -26,38 +35,6 @@ public class Movable extends GameObject {
 
     @Override
     public void collide(PowerUp powerUp) {
-    }
-
-    @Override
-    public void update(Observable o, Object obj) {
-    }
-
-    public void move(int x, int y) {
-
-    }
-
-    public void moveUp(int x) {
-
-    }
-
-    public void moveDown(int x) {
-
-    }
-
-    public void moveLeft(int y) {
-
-    }
-
-    public void moveRight(int y) {
-
-    }
-
-    public int getDirection(int x, int y) {
-        return 0;
-    }
-
-    public void setDirection() {
-
     }
 
 }

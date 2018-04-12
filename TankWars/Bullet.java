@@ -1,5 +1,6 @@
 package TankWars;
 
+import java.awt.image.BufferedImage;
 import java.util.Observable;
 
 /**
@@ -10,8 +11,8 @@ import java.util.Observable;
 public class Bullet extends GameObject {
     
     //constructor
-    public Bullet(){
-        
+    public Bullet(int x, int y, BufferedImage image){
+        super(x,y,image);
     }
     
      @Override
@@ -36,11 +37,6 @@ public class Bullet extends GameObject {
     
     @Override
     public void collide(PowerUp powerUp){
-        
-    }
-    
-    @Override
-    public void update(Observable o, Object obj){
         
     }
     

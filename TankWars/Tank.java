@@ -1,22 +1,34 @@
 package TankWars;
+import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.util.HashSet;
 import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
 
 /**
  *
  * @author Alnguye
  * 3/21/18
  */
-public class Tank extends Movable {
+public class Tank extends Movable implements Observer{
     //data fields
     private int health;
+    private Set<Integer> keys;
     private int ammo;
     private int lives;
-    private int x;
-    private int y;
+    private int deltaX,deltaY;
+    final int r = 4;
+    private short angle;
+    private KeyMapping keyMap;
     
     //constructor
-    public Tank(){
-        
+    public Tank(int x, int y,short angle, BufferedImage image, KeyMapping kmap){
+        super(x,y,image);
+        keys = new HashSet();
+        this.keyMap = kmap;
+        this.angle = angle;
     }
     
     @Override
@@ -46,27 +58,12 @@ public class Tank extends Movable {
     
     @Override
     public void update(Observable o, Object obj){
-        
+        Controller controller = (Controller) o;
+        keys = controller.getKeys();
+        MoveTanks();
     }
     
     //getters for coordinates
-    public int getX(int x){
-        return this.x = x;
-    }
-    
-    public int getY(int y){
-        return this.y = y;
-    }
-    
-    //setters for coordinates
-    public void setX(int x){
-        this.x = x;
-    }
-    
-    public void setY(int y){
-        this.y = y;
-    }
-    
     public void setLives(int lives){
         this.lives = lives;
     }
@@ -85,5 +82,42 @@ public class Tank extends Movable {
     
     public void shoot(){
         
+    }
+    public void moveUp() {
+        deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
+        deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
+        x += deltaX;
+        y += deltaY;
+    }
+
+    public void moveDown() {
+        deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
+        deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
+        x -= deltaX;
+        y -= deltaY;
+    }
+
+    public void moveLeft() {
+        this.angle -= 3;
+    }
+    public void moveRight() {
+        this.angle += 3;
+    }
+    private void MoveTanks(){
+        if(keys.contains(keyMap.getUpKey())){
+            this.moveUp(); 
+        }
+        if(keys.contains(keyMap.getRightKey())){
+            this.moveRight(); 
+        }
+        if(keys.contains(keyMap.getDownKey())){
+            this.moveDown();
+        }
+        if(keys.contains(keyMap.getLeftKey())){
+           this.moveLeft(); 
+        }
+        if(keys.contains(keyMap.getShootKey())){
+           this.moveLeft();
+        }
     }
 }

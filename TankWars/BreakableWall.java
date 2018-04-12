@@ -5,6 +5,7 @@
  */
 package TankWars;
 
+import java.awt.image.BufferedImage;
 import java.util.Observable;
 
 /**
@@ -14,8 +15,8 @@ import java.util.Observable;
 public class BreakableWall extends GameObject {
     
     //constructor
-    public BreakableWall(){
-        
+    public BreakableWall(int x, int y, BufferedImage image){
+        super(x,y,image);
     }
     
     @Override
@@ -42,12 +43,6 @@ public class BreakableWall extends GameObject {
     public void collide(PowerUp powerUp){
         
     }
-    
-    @Override
-    public void update(Observable o, Object obj){
-        
-    }
-    
     public int getSpawn(){
         return 0;
     }
