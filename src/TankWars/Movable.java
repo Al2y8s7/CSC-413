@@ -1,81 +1,40 @@
 package TankWars;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
- * @author Alnguye
+ * @author Alvin Nguyen & Moses Martinez
  */
-public abstract class Movable extends GameObject {
-    //data fields
-    private int velocity;
-    double d;
+public abstract class Movable extends GameObject{
     
-    //constructor
-    public Movable(int x, int y, int velocity, BufferedImage image, int width, int length){
-	super(x, y, velocity, image, width, length);
-	this.x = x;
-	this.y = y;
-	this.image = image;
-	this.velocity = velocity;
-	this.width = width;
-	this.length = length;
-	
+        
+    public Movable(int x, int y, BufferedImage image) {
+        super(x,y,image);
     }
-    
-    
-    public void move(int direction) {
-	int newXcoord = (int) (getVelocity() * Math.sin(getDirection()));
-	int newYcoord = (int) (getVelocity() * Math.cos(getDirection()));
-	this.setCoord(newXcoord + this.getX(), newYcoord + this.getY());
-    } 
-    
-    public int getX(){
-	return x;
-    }
-    
-    public int getY(){
-	return y;
-    }
-    
-    public void newX(int changeX){
-	this.x += changeX;
-    }
-    
-    public void newY(int changeY){
-	this.y += changeY;
-    }
-    
-    public void setX(int x){
-	this.x = x;
-    }
-    public void setY(int y){
-	this.y = y;
-    }
-    
-    public int getVelocity(){
-	return velocity;
-    }
-    
-   public void setVelocity(int v){
-       this.velocity = v;
-   }
-   
-   public void changeVelocity(int newV){
-       this.velocity += newV;
-   }
-   
-   public double getDirection(){
-       return d;
-   }
-   
-   public void setDirection(double d){
-       this.d = d;
-   }
-   
- 
-   
-   
-   
-    
+
+//    @Override
+//    public void collide(GameObject gameObject) {
+//    }
+//
+//    @Override
+//    public void collide(Tank tank) {
+//    }
+//
+//    @Override
+//    public void collide(Bullet bullet) {
+//    }
+//
+//    @Override
+//    public void collide(BreakableWall breakableWall) {
+//    }
+//
+//    @Override
+//    public void collide(PowerUp powerUp) {
+//    }
+
 }

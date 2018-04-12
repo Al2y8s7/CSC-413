@@ -1,129 +1,64 @@
 package TankWars;
 
-
 import java.awt.event.KeyAdapter;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Observable;
+import java.util.Set;
 
 /**
- * 
- * @author Alnguye
- * This class maps the movement of game objects
+ *
+ * @author mmmos
  */
-public class Controller extends Observable implements KeyListener {
+public class Controller extends Observable {// implements KeyListener{
     
-    //directions for movements
-    int left, right, up, down, shoot;
-    boolean mvLeft, mvRight, mvUp, mvDown;
-    //Hash set to store directional input
-    private final Set<Integer> keyInput;
+    Set<Integer> keys = new HashSet();
+    KeyAdapter ka;
     
-    //constructor
-    public Controller(int left, int right, int up, int down, int shoot){
-	keyInput = new HashSet<>();
-	this.left = left;
-	this.right = right;
-	this.up = up;
-	this.down = down;
-	this.shoot = shoot;
+    public Controller(){
+        ka = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e){
+                int key = e.getKeyCode();
+                keys.add(key); 
+                Controller.this.setChanged();
+                Controller.this.notifyObservers(Controller.this);
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                int key = e.getKeyCode();
+                keys.remove(key);
+                Controller.this.setChanged();
+                Controller.this.notifyObservers(Controller.this);
+    }
+        };
     }
     
     
+    /*
     @Override
-    public void keyPressed(KeyEvent k){
-	int key = k.getKeyCode();
-	this.keyInput.add(key);
-	setChanged();
-	notifyObservers();
+    public void keyTyped(KeyEvent e){ }
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        System.out.println("Key Pressed: " + e.getKeyCode());
+        keys.add(key); 
+        notifyObservers();
     }
-    
-    @Override 
-    public void keyReleased(KeyEvent k){
-	int key = k.getKeyCode();
-	this.keyInput.remove(key);
-	setChanged();
-	notifyObservers();
-    	
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        System.out.println("Key Released: " + e.getKeyCode());
+        keys.remove(key);
+        notifyObservers();
     }
-    
-     @Override
-    public void keyTyped(KeyEvent e) {
-	
+    */
+    public Set<Integer> getKeys(){
+        return keys;
     }
-    
-    
-    
-    
-    //map direction keys for movement
-    public void movement(KeyEvent key){
-	//when keys are pressed
-	if(key.getID() == KeyEvent.KEY_PRESSED){
-	    if(key.getID() == getLeft() && !mvLeft){
-		mvLeft = true;
-	    }
-	    if(key.getID() == getRight() && !mvRight){
-		mvRight = true;
-	    }
-	    if(key.getID() == getUp() && !mvUp){
-		mvUp = true;
-	    }
-	    if(key.getID() == getDown() && !mvDown){
-		mvDown = true;
-	    }
-	}
-	//when keys are released
-	if(key.getID() == KeyEvent.KEY_RELEASED){
-	    if(key.getID() == getLeft() && mvLeft){
-		mvLeft = false;
-	    }
-	    if(key.getID() == getRight() && mvRight){
-		mvRight = false;
-	    }
-	    if(key.getID() == getUp() && mvUp){
-		mvUp = false;
-	    }
-	    if(key.getID() == getDown() && mvDown){
-		mvDown = false;
-	    }
-	}
+    public KeyAdapter getKeyAdapter(){
+        return ka;
     }
-    
-    
-    //getters   
-    public boolean getMvLeft(){
-	return mvLeft;
-    }
-    
-    public boolean getMvRight(){
-	return mvRight;
-    }
-    
-    public boolean getMvUp(){
-	return mvUp;
-    }
-    
-    public boolean getMvDown(){
-	return mvDown;
-    }
-    
-    public int getLeft(){
-	return left;
-    }
-    
-    public int getRight(){
-	return right;
-    }
-    
-    public int getUp(){
-	return up;
-    }
-    
-    public int getDown(){
-	return down;
-    }
-
- 
     
 }

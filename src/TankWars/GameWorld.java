@@ -1,20 +1,22 @@
 package TankWars;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Image;
-import java.awt.Point;
+import java.io.File;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
+import javax.swing.Timer;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -22,15 +24,17 @@ import javax.swing.JPanel;
  * @author Alnguye This class handles all in-game objects (game objects) Utilizes ActionsEvents and checks for updates from Observers
  *
  */
-public class GameWorld extends JPanel implements Observer {
+public class GameWorld extends JPanel {
 
     //used for update method
-    private Tank t1, t2;
-    private Controller controller1, controller2;
-    private GameClock gameClock;
+    private Tank tank1, tank2;
     private BufferedImage background; 
-    private static BufferedImage gameMap, tank1, payload, nWalls, bWalls,water;
+    private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls,water;
     private int width, height;
+    
+    private Controller tankControls;
+    private Timer timer;
+    private KeyMapping player1, player2;
     
     //Arrays lists to store all game objects
     ArrayList<GameObject> GOList;
@@ -53,7 +57,11 @@ public class GameWorld extends JPanel implements Observer {
 	setBackground();
 	initResources();
 	setMap();
-	//setGameClock();
+	initKeyMapping();
+	initTanks();
+	initTimer();
+	timer.start();
+	
 	
 
     }
@@ -76,7 +84,8 @@ public class GameWorld extends JPanel implements Observer {
 	//draw background
 	g.drawImage(background, 0, 0, null);
 	//worldMapGraphics.drawImage(background, 0, 0, null);
-	g.drawImage(tank1, 80, 670, null);
+	g.drawImage(tank1.getImage(), tank1.getX(), tank1.getY(), null);
+	g.drawImage(tank2.getImage(), tank2.getX(), tank2.getY(), null);
 //	for(int i = 0; i < nWallList.size(); i++){
 //	    nWallList.get(i).draw(g);
 //	    for(int j = 0; j < bWallList.size(); j++){
@@ -92,7 +101,7 @@ public class GameWorld extends JPanel implements Observer {
 	}
 	for(int i = 0; i < bWallList.size(); i++){
 	    BreakableWall bWall = bWallList.get(i);
-	    if(!bWall.checkVisibility()){
+	    if(!bWall.isVisible()){
 		bWallList.remove(bWall);
 		GOList.remove(bWall);
 	    }else{
@@ -114,11 +123,11 @@ public class GameWorld extends JPanel implements Observer {
 	for (int y = 0; y < 25; y++){ 
 	    for (int x = 0; x <= 40; x++) {
  		if (GameMap[y][x] == 1) {
-		    normalWalls = new NormalWall(x * 32, y * 32, 0, nWalls, 32, 32);
+		    normalWalls = new NormalWall(x * 32, y * 32, nWalls);
 		    nWallList.add(normalWalls);
 		    GOList.add(normalWalls);
 		} else if(GameMap[y][x] == 2){
-		   breakableWalls = new BreakableWall(x * 32, y * 32, 0, bWalls, 32, 32);
+		   breakableWalls = new BreakableWall(x * 32, y * 32, bWalls);
 		   bWallList.add(breakableWalls);
 		   GOList.add(breakableWalls);
 		}
@@ -139,7 +148,8 @@ public class GameWorld extends JPanel implements Observer {
     //load tanks, walls and other game objects
     public void initResources() {
 	try{
-	    tank1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Tank1.png"));
+	    tankImage1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Tank1.png"));
+	    tankImage2 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Tank2.png"));
 	    nWalls = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Wall1.gif"));
 	    bWalls = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Wall2.gif"));
 	    water = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/water.png"));
@@ -165,34 +175,24 @@ public class GameWorld extends JPanel implements Observer {
 	bWallList = new ArrayList<>();
     }
 
-    protected void setGameClock() {
-	gameClock = new GameClock();
-	gameClock.addObserver(this);
-	gameClock.addObserver(t1);
-	gameClock.addObserver(t2);
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-	updateTanks(t1, controller1);
-	updateTanks(t2, controller2);
-	repaint();
-    }
-
-    //methods for game objects to be updated
-    public void updateTanks(Tank tank, Controller controller) {
-	
-    }
-
    
-    
-    
-    
-    //setup controls for tanks
-    public void setControls() {
-	//controls for controller1
-	controller1 = new Controller(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_ENTER);
-	controller2 = new Controller(KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_SPACE);
+   //Movement implement by Moses
+   private void initTanks(){
+        tank1 = new Tank(100,400,(short) 0, tankImage1,player1);
+        tank2 = new Tank(700,400,(short) 0,tankImage2,player2);
+        tankControls = new Controller();
+        addKeyListener(tankControls.getKeyAdapter());
+        this.tankControls.addObserver(tank1);
+        this.tankControls.addObserver(tank2);
+    }
 
+   private void initTimer(){     
+        timer = new Timer(1000/144, (ActionEvent e) -> {
+            GameWorld.this.repaint();
+        });
+    }    
+    private void initKeyMapping(){
+        player1 = new KeyMapping(KeyEvent.VK_UP,KeyEvent.VK_RIGHT,KeyEvent.VK_DOWN,KeyEvent.VK_LEFT,KeyEvent.VK_ENTER);
+        player2 = new KeyMapping(KeyEvent.VK_W,KeyEvent.VK_D,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_SPACE);
     }
 }

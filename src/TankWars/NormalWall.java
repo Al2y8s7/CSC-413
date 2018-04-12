@@ -14,14 +14,11 @@ import java.util.Observable;
  */
 public class NormalWall extends GameObject {
 
-    public NormalWall(int x, int y, int velocity, BufferedImage image, int width, int length) {
-	super(x, y, velocity, image, width, length);
+    public NormalWall(int x, int y, BufferedImage image) {
+	super(x, y, image);
 
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-	
-    }
+   
     
 }

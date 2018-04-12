@@ -14,16 +14,11 @@ import java.util.Observable;
  */
 public class BreakableWall extends GameObject {
 
-    public BreakableWall(int x, int y, int velocity, BufferedImage image, int width, int length) {
-	super(x, y, velocity, image, width, length);
+    public BreakableWall(int x, int y, BufferedImage image) {
+	super(x, y, image);
 
     }
     
-    
-
-    @Override
-    public void update(Observable o, Object arg) {
-	
-    }
+   
     
 }

@@ -1,58 +1,123 @@
 package TankWars;
-
-import java.awt.event.KeyListener;
+import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
-public class Tank extends Movable implements Observer {
+/**
+ *
+ * @author Alvin Nguyen & Moses Martinez
+ * 
+ */
+public class Tank extends Movable implements Observer{
     //data fields
-    private int health, ammo,velocity, x, y;
+    private int health;
+    private Set<Integer> keys;
+    private int ammo;
+    private int lives;
+    private int deltaX,deltaY;
+    final int r = 10;
+    private short angle;
+    private KeyMapping keyMap;
     
-    
-    //default constructor
-    public Tank(int x, int y, int velocity, BufferedImage image, int health, int ammo, int width, int length){
-	super(x, y, velocity, image, width, length);
-	this.health = health;
-	this.ammo = ammo;
-	this.isSolid = true;
-	this.isVisible = true;
-	this.velocity = velocity;
-	this.width = width;
-	this.length = length;
+    //constructor
+    public Tank(int x, int y,short angle, BufferedImage image, KeyMapping kmap){
+        super(x,y,image);
+        keys = new HashSet();
+        this.keyMap = kmap;
+        this.angle = angle;
     }
     
-     
-    //getters
-    public int getHealth(int startHealth){
-	return this.health = startHealth;
-    }
-    
-    public int getAmmo(int startAmmo){
-	return this.ammo = startAmmo;
-    }
-    
-    public int getXcoord(int startX){
-	return this.x = startX;
-    }
-    
-    
-    //methods for movement
-    public void move(){
-	
-    }
-    
-    
+//    @Override
+//    public void collide(GameObject gameObject){
+//        
+//    }
+//    
+//    @Override
+//    public void collide(Tank tank){
+//        
+//    }
+//    
+//    @Override
+//    public void collide(Bullet bullet){
+//        
+//    }
+//    
+//    @Override
+//    public void collide(BreakableWall breakableWall){
+//        
+//    }
+//    
+//    @Override
+//    public void collide(PowerUp powerUp){
+//        
+//    }
+//    
     @Override
-    public void update(Observable o, Object arg) {
-	
+    public void update(Observable o, Object obj){
+        Controller controller = (Controller) o;
+        keys = controller.getKeys();
+        MoveTanks();
     }
     
-    private void moveForward(){
-	
+    //getters for coordinates
+    public void setLives(int lives){
+        this.lives = lives;
+    }
+    
+    public void setHealth(int health){
+        this.health = health;
+    }
+    
+    public int getAmmo(int ammo){
+        return this.ammo = ammo;
+    }
+    
+    public void setAmmo(int ammo){
+        this.ammo = ammo;
+    }
+    
+    public void shoot(){
+        
+    }
+    public void moveUp() {
+        deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
+        deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
+        x += deltaX;
+        y += deltaY;
     }
 
-   
+    public void moveDown() {
+        deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
+        deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
+        x -= deltaX;
+        y -= deltaY;
+    }
 
+    public void moveLeft() {
+        this.angle -= 3;
+    }
+    public void moveRight() {
+        this.angle += 3;
+    }
+    private void MoveTanks(){
+        if(keys.contains(keyMap.getUpKey())){
+            this.moveUp(); 
+        }
+        if(keys.contains(keyMap.getRightKey())){
+            this.moveRight(); 
+        }
+        if(keys.contains(keyMap.getDownKey())){
+            this.moveDown();
+        }
+        if(keys.contains(keyMap.getLeftKey())){
+           this.moveLeft(); 
+        }
+        if(keys.contains(keyMap.getShootKey())){
+           this.moveLeft();
+        }
+    }
 }
