@@ -19,10 +19,6 @@ public class BreakableWall extends GameObject {
         super(x,y,image);
     }
     
-    @Override
-    public void collide(GameObject gameObject){
-        
-    }
     
     @Override
     public void collide(Tank tank){
