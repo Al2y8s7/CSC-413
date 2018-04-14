@@ -64,8 +64,10 @@ public class GameWorld extends JPanel{
                }
            }
         }
-        g2d.drawImage(tank1.getImage(),tank1.getX(),tank1.getY(),null);
-        g2d.drawImage(tank2.getImage(),tank2.getX(),tank2.getY(),null);
+      //  g2d.drawImage(tank1.getImage(),tank1.getX(),tank1.getY(),null);
+        tank1.draw(g2d);
+       // g2d.drawImage(tank2.getImage(),tank2.getX(),tank2.getY(),null);
+        tank2.draw(g2d);
         g2d.drawImage(breakWall.getImage(),breakWall.getX(),breakWall.getY(),null);
         g2d.drawImage(normWall.getImage(),normWall.getX(),normWall.getY(),null);
        // g2d.dispose();
@@ -93,7 +95,7 @@ public class GameWorld extends JPanel{
         this.tankControls.addObserver(tank2);
     }
     private void initTimer(){     
-        timer = new Timer(1000/144, (ActionEvent e) -> {
+        timer = new Timer(10, (ActionEvent e) -> {
             GameWorld.this.repaint();
         });
     }    

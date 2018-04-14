@@ -17,6 +17,7 @@ public abstract class GameObject{
 
     BufferedImage content;
     protected int x, y;
+    boolean visibility;
     
     //constructor
     public GameObject(int x, int y, BufferedImage Image){
@@ -27,6 +28,9 @@ public abstract class GameObject{
     
     public boolean isVisible(){
         return true;
+    }
+    public void setVisible(boolean visibility){
+        this.visibility = visibility;
     }
      public BufferedImage getImage(){
         return this.content;

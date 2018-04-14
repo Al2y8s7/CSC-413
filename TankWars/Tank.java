@@ -1,8 +1,8 @@
 package TankWars;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
-import java.awt.event.KeyEvent;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
@@ -19,14 +19,14 @@ public class Tank extends Movable implements Observer{
     private int ammo;
     private int lives;
     private int deltaX,deltaY;
-    final int r = 4;
+    final int r = 10;
     private short angle;
-    private KeyMapping keyMap;
+    private final KeyMapping keyMap;
     
     //constructor
     public Tank(int x, int y,short angle, BufferedImage image, KeyMapping kmap){
         super(x,y,image);
-        keys = new HashSet();
+      //  keys = new HashSet();
         this.keyMap = kmap;
         this.angle = angle;
     }
@@ -60,7 +60,31 @@ public class Tank extends Movable implements Observer{
     public void update(Observable o, Object obj){
         Controller controller = (Controller) o;
         keys = controller.getKeys();
-        MoveTanks();
+       // MoveTanks();
+        if(keys.contains(keyMap.getRightKey())){
+            System.out.println("Right");
+            this.moveRight(); 
+            System.out.println("Right");
+        }
+        if(keys.contains(keyMap.getDownKey())){
+            System.out.println("Down");
+            this.moveDown();
+            System.out.println("Down");
+        }
+        if(keys.contains(keyMap.getLeftKey())){
+           System.out.println("Left");
+           this.moveLeft(); 
+           System.out.println("Left");
+
+        }
+        if(keys.contains(keyMap.getUpKey())){
+           System.out.println("UP");
+            this.moveUp(); 
+            System.out.println("UP");
+        }
+        if(keys.contains(keyMap.getShootKey())){
+           
+        }
     }
     
     //getters for coordinates
@@ -98,10 +122,10 @@ public class Tank extends Movable implements Observer{
     }
 
     public void moveLeft() {
-        this.angle -= 3;
+        this.angle -= 10;
     }
     public void moveRight() {
-        this.angle += 3;
+        this.angle += 10;
     }
     private void MoveTanks(){
         if(keys.contains(keyMap.getUpKey())){
@@ -119,5 +143,16 @@ public class Tank extends Movable implements Observer{
         if(keys.contains(keyMap.getShootKey())){
            this.moveLeft();
         }
+    }
+    public void draw(Graphics g){
+        
+       // super.paintComponent(g);
+        
+        AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
+        rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
+        Graphics2D graphic2D = (Graphics2D) g;
+        graphic2D.drawImage(this.getImage(), rotation, null);
+        
+
     }
 }

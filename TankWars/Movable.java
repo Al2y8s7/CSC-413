@@ -1,5 +1,6 @@
 package TankWars;
 
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -36,5 +37,6 @@ public abstract class Movable extends GameObject{
     @Override
     public void collide(PowerUp powerUp) {
     }
+
 
 }
