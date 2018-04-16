@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 /**
  *
- * @author Alnguye
+ * @author Alvin Nguyen & Moses Martinez
  * This class stores game map in a 2D array
  */
 public class WorldMap {

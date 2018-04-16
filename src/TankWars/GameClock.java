@@ -12,7 +12,7 @@ import java.util.Timer;
 
 /**
  *
- * @author Alnguye
+ * @author Alvin Nguyen & Moses Martinez
  */
 public class GameClock extends Observable implements ActionListener {
     Timer gameTimer;

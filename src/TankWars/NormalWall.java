@@ -10,12 +10,12 @@ import java.util.Observable;
 
 /**
  *
- * @author Alnguye
+ * @author Alvin Nguyen & Moses Martinez
  */
 public class NormalWall extends GameObject {
 
-    public NormalWall(int x, int y, BufferedImage image, int length, int width) {
-	super(x, y, image, width, length);
+    public NormalWall(int x, int y, BufferedImage image, int width, int height) {
+	super(x, y, image, width, height);
 
     }
 
@@ -37,6 +37,11 @@ public class NormalWall extends GameObject {
     @Override
     public void collide(NormalWall normalWall) {
 	
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 
    

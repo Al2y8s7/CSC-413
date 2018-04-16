@@ -10,12 +10,12 @@ import java.util.Observable;
 
 /**
  *
- * @author Alnguye
+ * @author Alvin Nguyen @ Moses Martinez
  */
 public class BreakableWall extends GameObject {
 
-    public BreakableWall(int x, int y, BufferedImage image,int width, int length) {
-	super(x, y, image, width, length);
+    public BreakableWall(int x, int y, BufferedImage image,int width, int height) {
+	super(x, y, image, width, height);
 
     }
 
@@ -38,9 +38,11 @@ public class BreakableWall extends GameObject {
     public void collide(NormalWall normalWall) {
 	
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+	
+    }
     
-    
-    
-   
     
 }

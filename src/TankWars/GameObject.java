@@ -14,17 +14,19 @@ import java.util.Observer;
  * isVisible, Collidable, Update, getCoordinates, setCoordinates
  */
 
-public abstract class GameObject{
+public abstract class GameObject extends Observable implements Observer{
 
     BufferedImage content;
-    protected int x, y, width,length;
+    protected int x, y, width, height;
     boolean visibility, collided;
     
     //constructor
-    public GameObject(int x, int y, BufferedImage Image, int width, int length){
+    public GameObject(int x, int y, BufferedImage Image, int width, int height){
         this.content = Image;
         this.x = x;
         this.y = y;
+	this.width = width;
+	this.height = height;
     }
     
     public boolean isVisible(){
@@ -53,7 +55,7 @@ public abstract class GameObject{
     
     //for collision detection
     public Rectangle getHitBox(){
-	return new Rectangle(x, y, width, length);
+	return new Rectangle(x, y);
     }
     
     

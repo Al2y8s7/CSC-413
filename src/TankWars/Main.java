@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author Alnguye This class runs the game Utilizes Engine class
+ * @author Alvin Nguyen & Moses Martinez
  */
 public class Main extends JFrame {
 
