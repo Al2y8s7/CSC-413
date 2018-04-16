@@ -13,8 +13,8 @@ import java.util.Observer;
 public abstract class Movable extends GameObject{
     
         
-    public Movable(int x, int y, BufferedImage image) {
-        super(x,y,image);
+    public Movable(int x, int y, BufferedImage image, int width, int length) {
+        super(x,y,image, width, length);
     }
 
 //    @Override

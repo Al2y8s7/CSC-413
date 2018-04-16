@@ -1,4 +1,5 @@
 package TankWars;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Observable;
 import java.util.Observer;
@@ -16,10 +17,11 @@ import java.util.Observer;
 public abstract class GameObject{
 
     BufferedImage content;
-    protected int x, y;
+    protected int x, y, width,length;
+    boolean visibility, collided;
     
     //constructor
-    public GameObject(int x, int y, BufferedImage Image){
+    public GameObject(int x, int y, BufferedImage Image, int width, int length){
         this.content = Image;
         this.x = x;
         this.y = y;
@@ -28,6 +30,11 @@ public abstract class GameObject{
     public boolean isVisible(){
         return true;
     }
+    
+    public void setVisible(boolean visibility){
+        this.visibility = visibility;
+    }
+    
      public BufferedImage getImage(){
         return this.content;
     }
@@ -43,10 +50,22 @@ public abstract class GameObject{
     public int getY(){
         return this.y;
     }
-//    public abstract void collide(GameObject gameObject);
-//    
-//    public abstract void collide(Tank tank);
-//    
+    
+    //for collision detection
+    public Rectangle getHitBox(){
+	return new Rectangle(x, y, width, length);
+    }
+    
+    
+    
+    public abstract void collide(GameObject gameObject);
+    
+    public abstract void collide(Tank tank);
+    
+    public abstract void collide(BreakableWall breakableWall);
+    
+    public abstract void collide(NormalWall normalWall);
+    
 //    public abstract void collide(Bullet bullet);
 //    
 //    public abstract void collide(BreakableWall breakableWall);

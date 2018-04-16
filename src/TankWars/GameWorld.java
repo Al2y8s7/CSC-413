@@ -84,8 +84,14 @@ public class GameWorld extends JPanel {
 	//draw background
 	g.drawImage(background, 0, 0, null);
 	//worldMapGraphics.drawImage(background, 0, 0, null);
-	g.drawImage(tank1.getImage(), tank1.getX(), tank1.getY(), null);
-	g.drawImage(tank2.getImage(), tank2.getX(), tank2.getY(), null);
+	
+	//draws tanks with rotation
+	tank1.draw(g);
+	tank2.draw(g);
+	
+	//g.drawImage(tank1.getImage(), tank1.getX(), tank1.getY(), null);
+	//g.drawImage(tank2.getImage(), tank2.getX(), tank2.getY(), null);
+	
 //	for(int i = 0; i < nWallList.size(); i++){
 //	    nWallList.get(i).draw(g);
 //	    for(int j = 0; j < bWallList.size(); j++){
@@ -123,11 +129,11 @@ public class GameWorld extends JPanel {
 	for (int y = 0; y < 25; y++){ 
 	    for (int x = 0; x <= 40; x++) {
  		if (GameMap[y][x] == 1) {
-		    normalWalls = new NormalWall(x * 32, y * 32, nWalls);
+		    normalWalls = new NormalWall(x * 32, y * 32, nWalls , 32, 32);
 		    nWallList.add(normalWalls);
 		    GOList.add(normalWalls);
 		} else if(GameMap[y][x] == 2){
-		   breakableWalls = new BreakableWall(x * 32, y * 32, bWalls);
+		   breakableWalls = new BreakableWall(x * 32, y * 32, bWalls, 32, 32);
 		   bWallList.add(breakableWalls);
 		   GOList.add(breakableWalls);
 		}
@@ -178,8 +184,8 @@ public class GameWorld extends JPanel {
    
    //Movement implement by Moses
    private void initTanks(){
-        tank1 = new Tank(100,400,(short) 0, tankImage1,player1);
-        tank2 = new Tank(700,400,(short) 0,tankImage2,player2);
+        tank1 = new Tank(100,400,(short) 0, tankImage1,player1, 32, 32);
+        tank2 = new Tank(700,400,(short) 0,tankImage2,player2, 32 ,32);
         tankControls = new Controller();
         addKeyListener(tankControls.getKeyAdapter());
         this.tankControls.addObserver(tank1);
