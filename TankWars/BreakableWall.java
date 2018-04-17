@@ -10,52 +10,39 @@ import java.util.Observable;
 
 /**
  *
- * @author Alnguye
+ * @author Alvin Nguyen @ Moses Martinez
  */
 public class BreakableWall extends GameObject {
-    
-    //constructor
-    public BreakableWall(int x, int y, BufferedImage image){
-        super(x,y,image);
+
+    public BreakableWall(int x, int y, BufferedImage image,int width, int height) {
+	super(x, y, image, width, height);
+
     }
-    
+
     @Override
-    public void collide(GameObject gameObject){
-        
+    public void collide(GameObject gameObject) {
+	
     }
-    
+
     @Override
-    public void collide(Tank tank){
-        
+    public void collide(Tank tank) {
+	
     }
-    
+
     @Override
-    public void collide(Bullet bullet){
-        
+    public void collide(BreakableWall breakableWall) {
+	
     }
-    
+
     @Override
-    public void collide(BreakableWall breakableWall){
-        
+    public void collide(NormalWall normalWall) {
+	
     }
-    
+
     @Override
-    public void collide(PowerUp powerUp){
-        
-    }
-    public int getSpawn(){
-        return 0;
+    public void update(Observable o, Object arg) {
+	
     }
     
-    public void setSpawn(){
-        
-    }
     
-    public int getIntegrity(){
-        return 0;
-    }
-    
-    public void setIntegrity(){
-        
-    }
 }

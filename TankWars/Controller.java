@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package TankWars;
 
 import java.awt.event.KeyAdapter;
@@ -44,7 +39,6 @@ public class Controller extends Observable {// implements KeyListener{
     /*
     @Override
     public void keyTyped(KeyEvent e){ }
-
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();

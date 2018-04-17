@@ -10,8 +10,8 @@ import java.util.Observable;
  */
 public class PowerUp extends GameObject {
     //constructor
-    public PowerUp(int x, int y, BufferedImage image){
-        super(x,y,image);
+    public PowerUp(int x, int y, BufferedImage image, int z, int w){
+        super(x,y,image, w , z);
     }
     @Override
     public void collide(GameObject gameObject){
@@ -23,7 +23,6 @@ public class PowerUp extends GameObject {
         
     }
     
-    @Override
     public void collide(Bullet bullet){
         
     }
@@ -33,7 +32,6 @@ public class PowerUp extends GameObject {
         
     }
     
-    @Override
     public void collide(PowerUp powerUp){
         
     }
@@ -43,5 +41,15 @@ public class PowerUp extends GameObject {
     
     public void setTarget(){
         
+    }
+
+    @Override
+    public void collide(NormalWall normalWall) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

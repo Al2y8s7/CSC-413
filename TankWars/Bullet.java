@@ -11,8 +11,8 @@ import java.util.Observable;
 public class Bullet extends GameObject {
     
     //constructor
-    public Bullet(int x, int y, BufferedImage image){
-        super(x,y,image);
+    public Bullet(int x, int y, BufferedImage image,int z,int w){
+        super(x,y,image,z,w);
     }
     
      @Override
@@ -25,7 +25,6 @@ public class Bullet extends GameObject {
         
     }
     
-    @Override
     public void collide(Bullet bullet){
         
     }
@@ -35,13 +34,20 @@ public class Bullet extends GameObject {
         
     }
     
-    @Override
     public void collide(PowerUp powerUp){
         
     }
     
     public void destroy(){
         
+    }
+
+    @Override
+    public void collide(NormalWall normalWall) {
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
     }
     
 }

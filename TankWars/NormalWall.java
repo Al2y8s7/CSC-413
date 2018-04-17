@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package TankWars;
 
 import java.awt.image.BufferedImage;
@@ -5,47 +10,40 @@ import java.util.Observable;
 
 /**
  *
- * @author Alnguye
+ * @author Alvin Nguyen & Moses Martinez
  */
 public class NormalWall extends GameObject {
 
-    public NormalWall(int x, int y, BufferedImage image) {
-        super(x,y,image);
+    public NormalWall(int x, int y, BufferedImage image, int width, int height) {
+	super(x, y, image, width, height);
+
     }
+
     @Override
-    public void collide(GameObject gameObject){
-        
+    public void collide(GameObject gameObject) {
+	
     }
-    
+
     @Override
-    public void collide(Tank tank){
-        
+    public void collide(Tank tank) {
+	
     }
-    
+
     @Override
-    public void collide(Bullet bullet){
-        
+    public void collide(BreakableWall breakableWall) {
+	
     }
-    
+
     @Override
-    public void collide(BreakableWall breakableWall){
-        
+    public void collide(NormalWall normalWall) {
+	
     }
-    
+
     @Override
-    public void collide(PowerUp powerUp){
-        
+    public void update(Observable o, Object arg) {
+
     }
+
+   
     
-     public int getSpawn(){
-         return 0;
-     }
-     
-     public void setSpawn(){
-         
-     }
-     
-     public void setIntegrity(){
-         
-     }
 }

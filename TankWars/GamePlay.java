@@ -9,7 +9,7 @@ import javax.swing.JFrame;
  * 3/21/18
  */
 public class GamePlay extends JFrame  {
-    
+ /*   
     private JButton startGame;
 
     public void gameStart(){
@@ -30,4 +30,5 @@ public class GamePlay extends JFrame  {
         newGame.gameStart();
         
     }
+    */
 }

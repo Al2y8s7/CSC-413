@@ -1,6 +1,5 @@
 package TankWars;
 
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -9,34 +8,33 @@ import java.util.Observer;
 
 /**
  *
- * @author Alnguye 3/21/18
+ * @author Alvin Nguyen & Moses Martinez
  */
 public abstract class Movable extends GameObject{
     
         
-    public Movable(int x, int y, BufferedImage image) {
-        super(x,y,image);
+    public Movable(int x, int y, BufferedImage image, int width, int length) {
+        super(x,y,image, width, length);
     }
 
-    @Override
-    public void collide(GameObject gameObject) {
-    }
-
-    @Override
-    public void collide(Tank tank) {
-    }
-
-    @Override
-    public void collide(Bullet bullet) {
-    }
-
-    @Override
-    public void collide(BreakableWall breakableWall) {
-    }
-
-    @Override
-    public void collide(PowerUp powerUp) {
-    }
-
+//    @Override
+//    public void collide(GameObject gameObject) {
+//    }
+//
+//    @Override
+//    public void collide(Tank tank) {
+//    }
+//
+//    @Override
+//    public void collide(Bullet bullet) {
+//    }
+//
+//    @Override
+//    public void collide(BreakableWall breakableWall) {
+//    }
+//
+//    @Override
+//    public void collide(PowerUp powerUp) {
+//    }
 
 }
