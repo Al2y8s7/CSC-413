@@ -17,6 +17,8 @@ import java.util.Set;
 import javax.swing.Timer;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -121,10 +123,8 @@ public class GameWorld extends JPanel{// implements Observer {
 	    BreakableWall bWall = bWallList.get(i);
 	    if(!bWall.getVisibility()){
 		bWallList.remove(bWall);
-		GOList.remove(bWall);
+		//GOList.remove(bWall);
 	    }
-            else if(bWall.getVisibility() == false)
-                bWallList.remove(i);
             else{
 		g.drawImage(bWall.getImage(), bWall.getX(), bWall.getY(), null);
 		worldMapGraphics.drawImage(bWall.getImage(), bWall.getX(), bWall.getY(), null);
@@ -146,11 +146,11 @@ public class GameWorld extends JPanel{// implements Observer {
  		if (GameMap[y][x] == 1) {
 		    normalWalls = new NormalWall(x * 32, y * 32, nWalls , 32, 32);
 		    nWallList.add(normalWalls);
-		    GOList.add(normalWalls);
+		   // GOList.add(normalWalls);
 		} else if(GameMap[y][x] == 2){
 		   breakableWalls = new BreakableWall(x * 32, y * 32, bWalls, 32, 32);
 		   bWallList.add(breakableWalls);
-		   GOList.add(breakableWalls);
+		 //  GOList.add(breakableWalls);
 		}
 	    }
 	}
@@ -190,7 +190,7 @@ public class GameWorld extends JPanel{// implements Observer {
     }
     
     public void setGameLists() {
-	GOList = new ArrayList<>();
+	//GOList = new ArrayList<>();
 	tankList = new ArrayList<>();
 	nWallList = new ArrayList<>();
 	bWallList = new ArrayList<>();
@@ -208,7 +208,7 @@ public class GameWorld extends JPanel{// implements Observer {
     }
 
    private void initTimer(){     
-        timer = new Timer(20, (ActionEvent e) -> {
+        timer = new Timer(1000/144, (ActionEvent e) -> {
             GameWorld.this.detectCollision();
             GameWorld.this.repaint();
         });
@@ -224,7 +224,10 @@ public class GameWorld extends JPanel{// implements Observer {
 	Rectangle tank1HitBox = tank1.getHitBox();
 	Rectangle tank2HitBox = tank2.getHitBox();
         if(tank1HitBox.intersects(tank2HitBox)){
-            System.out.println("Tanks Colliding");
+            tank1.setX(tank1.getXnonCollision());
+            tank1.setY(tank1.getYnonCollision());
+            tank2.setX(tank2.getXnonCollision());
+            tank2.setY(tank2.getYnonCollision());
         }
 	//iterate through GO ArrayList and draw hitboxes for all GO's
         for(BreakableWall bWall: bWallList){
@@ -244,13 +247,12 @@ public class GameWorld extends JPanel{// implements Observer {
 	       Rectangle nHitBox = nWall.getHitBox();
 	       if(tank1HitBox.intersects(nHitBox)){
 		   
-                   tank1.setX(tank1.getX()-5);
-                   tank1.setY(tank1.getY()-5);
-                
+                 tank1.setX(tank1.getXnonCollision());
+                 tank1.setY(tank1.getYnonCollision());
 	       }
 	       if(tank2HitBox.intersects(nHitBox)){
-		    tank2.setX(tank2.getX()-5);
-                    tank2.setY(tank2.getY()-5);
+		    tank2.setX(tank2.getXnonCollision());
+                    tank2.setY(tank2.getYnonCollision());
 	       }
 	   }
         
