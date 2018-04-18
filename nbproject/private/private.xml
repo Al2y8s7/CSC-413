@@ -3,17 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/alnguye/Documents/NetBeansProjects/TankWars/src/TankWars/GameWorld.java</file>
-            <file>file:/C:/Users/alnguye/Documents/NetBeansProjects/TankWars/src/TankWars/BreakableWall.java</file>
-            <file>file:/C:/Users/alnguye/Documents/NetBeansProjects/TankWars/src/TankWars/WorldMap.java</file>
-            <file>file:/C:/Users/alnguye/Documents/NetBeansProjects/TankWars/src/TankWars/Main.java</file>
-            <file>file:/C:/Users/alnguye/Documents/NetBeansProjects/TankWars/src/TankWars/Engine.java</file>
-=======
             <file>file:/C:/Users/alnguye/csc413-03-tankgame-Team12/src/TankWars/GameObject.java</file>
-            <file>file:/C:/Users/alnguye/csc413-03-tankgame-Team12/src/TankWars/Movable.java</file>
+            <file>file:/C:/Users/alnguye/csc413-03-tankgame-Team12/src/TankWars/GameWorld.java</file>
             <file>file:/C:/Users/alnguye/csc413-03-tankgame-Team12/src/TankWars/Tank.java</file>
->>>>>>> 32e343f606162a8af2ec56bdcbdcaa22cb7c695d
+            <file>file:/C:/Users/alnguye/csc413-03-tankgame-Team12/src/TankWars/Bullet.java</file>
         </group>
     </open-files>
 </project-private>
