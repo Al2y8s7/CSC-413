@@ -60,7 +60,7 @@ public abstract class GameObject extends Observable implements Observer{
     }
     //for collision detection
     public Rectangle getHitBox(){
-	return new Rectangle(this.x,this.y,this.content.getWidth(),this.content.getHeight());
+	return new Rectangle(this.x,this.y,this.content.getWidth()-10,this.content.getHeight()-10);
     }
     public abstract void collide(GameObject gameObject);
     

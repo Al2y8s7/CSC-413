@@ -25,7 +25,8 @@ public class Tank extends Movable implements Observer {
     private int ammo;
     private int lives;
     private int deltaX, deltaY;
-    final int r = 10;
+    private int nonCollideX,nonCollideY;
+    final int r = 5;
     private short angle;
     private KeyMapping keyMap;
     //for collision detection
@@ -41,7 +42,7 @@ public class Tank extends Movable implements Observer {
 	this.shotsFired = false;
 	collided = false;
     }
-
+    
     @Override
     public void collide(GameObject gameObject) {
 	collided = true;
@@ -83,15 +84,11 @@ public class Tank extends Movable implements Observer {
 //    }
 //   
     
-    public void NonCollisionCoord(){
-	xCollide = this.x;
-	yCollide = this.y;
-    }
-    
     @Override
     public void update(Observable o, Object obj) {
 	Controller controller = (Controller) o;
 	keys = controller.getKeys();
+        NonCollisionCoord();
 	MoveTanks();
     }
 
@@ -138,11 +135,11 @@ public class Tank extends Movable implements Observer {
     }
 
     public void moveLeft() {
-	this.angle -= 10;
+	this.angle -= 5;
     }
 
     public void moveRight() {
-	this.angle += 10;
+	this.angle += 5;
     }
 
     private void MoveTanks() {
@@ -169,7 +166,16 @@ public class Tank extends Movable implements Observer {
 	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
 	Graphics2D graphic2D = (Graphics2D) g;
 	graphic2D.drawImage(this.getImage(), rotation, null);
-
     }
-
+    public void NonCollisionCoord(){
+	this.nonCollideX = x;
+	this.nonCollideY = y;
+    }
+    public int getXnonCollision(){
+        return this.nonCollideX;
+    }
+    public int getYnonCollision(){
+        return this.nonCollideY;
+    }
+    
 }
