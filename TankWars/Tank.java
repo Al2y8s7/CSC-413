@@ -27,7 +27,7 @@ public class Tank extends Movable implements Observer {
     private int deltaX, deltaY;
     private int nonCollideX,nonCollideY;
     final int r = 5;
-    private short angle;
+    public short angle;
     private KeyMapping keyMap;
     //for collision detection
     protected int xCollide, yCollide;
@@ -166,6 +166,7 @@ public class Tank extends Movable implements Observer {
 	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
 	Graphics2D graphic2D = (Graphics2D) g;
 	graphic2D.drawImage(this.getImage(), rotation, null);
+        graphic2D.draw(this.getHitBox());
     }
     public void NonCollisionCoord(){
 	this.nonCollideX = x;
@@ -176,6 +177,9 @@ public class Tank extends Movable implements Observer {
     }
     public int getYnonCollision(){
         return this.nonCollideY;
+    }
+    public short getAngle(){
+        return this.angle;
     }
     
 }

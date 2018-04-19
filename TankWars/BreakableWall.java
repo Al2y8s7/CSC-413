@@ -38,11 +38,6 @@ public class BreakableWall extends GameObject {
     public void collide(NormalWall normalWall) {
 	
     }
-
-    @Override
-    public void update(Observable o, Object arg) {
-	
-    }
     
     
 }

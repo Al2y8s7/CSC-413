@@ -39,10 +39,6 @@ public class NormalWall extends GameObject {
 	
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 
    
     

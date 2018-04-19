@@ -1,18 +1,25 @@
 package TankWars;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author Alnguye
  * 3/21/18
  */
-public class Bullet extends GameObject {
-    
+public class Bullet extends Movable {
+    int deltaX,deltaY;
+    final int r = 8;
+    private short angle;
     //constructor
-    public Bullet(int x, int y, BufferedImage image,int z,int w){
-        super(x,y,image,z,w);
+    public Bullet(int x, int y, short angle, BufferedImage image,int width,int height){
+        super(x,y,image,width,height);
+        this.angle = angle;
     }
     
      @Override
@@ -46,8 +53,16 @@ public class Bullet extends GameObject {
     public void collide(NormalWall normalWall) {
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    public void draw(Graphics g){
+        AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
+	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
+	Graphics2D graphic2D = (Graphics2D) g;
+	graphic2D.drawImage(this.getImage(), rotation, null);
     }
-    
+    public void move(){
+        deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
+	deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
+	x += deltaX;
+	y += deltaY;
+    }
 }

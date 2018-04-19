@@ -14,7 +14,7 @@ import java.util.Observer;
  * isVisible, Collidable, Update, getCoordinates, setCoordinates
  */
 
-public abstract class GameObject extends Observable implements Observer{
+public abstract class GameObject {// extends Observable implements Observer{
 
     BufferedImage content;
     protected int x, y, width, height;
@@ -60,7 +60,7 @@ public abstract class GameObject extends Observable implements Observer{
     }
     //for collision detection
     public Rectangle getHitBox(){
-	return new Rectangle(this.x,this.y,this.content.getWidth()-10,this.content.getHeight()-10);
+	return new Rectangle(this.x,this.y,this.content.getWidth()-5,this.content.getHeight()-5);
     }
     public abstract void collide(GameObject gameObject);
     

@@ -34,6 +34,7 @@ public class GameWorld extends JPanel{// implements Observer {
     private Tank tank1, tank2;
     private BufferedImage background; 
     private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls,water;
+    private static BufferedImage bulletImage;
     private int width, height;
     
     private Controller tankControls;
@@ -45,7 +46,7 @@ public class GameWorld extends JPanel{// implements Observer {
     ArrayList<Tank> tankList;
     ArrayList<NormalWall> nWallList;
     ArrayList<BreakableWall> bWallList;
-    //private ArrayList<Bullet> bulletList = new ArrayList<>();
+    private ArrayList<Bullet> bulletList = new ArrayList<>();
     //private ArrayList<Explosion> explosionList = new ArrayList<>();
     //private ArrayList<Explosion> wallList = new AraryList<>();
     
@@ -58,8 +59,8 @@ public class GameWorld extends JPanel{// implements Observer {
     public GameWorld() {
 	setGameLists();
 	setFocusable(true);
+        initResources();
 	setBackground();
-	initResources();
 	setMap();
 	initKeyMapping();
 	initTanks();
@@ -89,30 +90,27 @@ public class GameWorld extends JPanel{// implements Observer {
     
     */
     
-    
     //draw objects to game window
     public void paintComponent(Graphics g){
 	super.printComponents(g);
 	worldMapGraphics = gameMap.createGraphics();
 	//draw background
 	g.drawImage(background, 0, 0, null);
-	//worldMapGraphics.drawImage(background, 0, 0, null);
 	//draws tanks with rotation
 	tank1.draw(g);
 	tank2.draw(g);
-	
-	//g.drawImage(tank1.getImage(), tank1.getX(), tank1.getY(), null);
-	//g.drawImage(tank2.getImage(), tank2.getX(), tank2.getY(), null);
-	
-//	for(int i = 0; i < nWallList.size(); i++){
-//	    nWallList.get(i).draw(g);
-//	    for(int j = 0; j < bWallList.size(); j++){
-//		bWallList.get(j);
-//	    }
-//	}
-//	
-
-
+        
+        if(tank1.getShoot() == true){
+            Bullet bullet = new Bullet(tank1.getX(),tank1.getY(),tank1.getAngle(),bulletImage,1,1);
+            bulletList.add(bullet);
+            tank1.setShoot(false);
+        }
+        if(tank2.getShoot() == true){
+            Bullet bullet = new Bullet(tank2.getX(),tank2.getY(),tank2.getAngle(),bulletImage,1,1);
+            bulletList.add(bullet);
+            tank2.setShoot(false);
+        }
+        drawBullets(g);
 	for(NormalWall nWall: nWallList){
 	    //draws coordinates for single normal wall
 	    g.drawImage(nWall.getImage(), nWall.getX(), nWall.getY(), null);
@@ -155,25 +153,17 @@ public class GameWorld extends JPanel{// implements Observer {
 	    }
 	}
     }
-	
     //load background  
-    public void initBackground() {
-	try {
-	    background = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Background.png"));
-
-	} catch (IOException ex) {
-	    ex.printStackTrace();
-	}
-    }
-    
     //load tanks, walls and other game objects
     public void initResources() {
 	try{
+            background = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Background.png"));
 	    tankImage1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Tank1.png"));
 	    tankImage2 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Tank2.png"));
 	    nWalls = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Wall1.gif"));
 	    bWalls = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Wall2.gif"));
 	    water = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/water.png"));
+            bulletImage = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shell.gif"));
 	    
 	}catch(IOException ex){
 	    ex.printStackTrace();
@@ -181,14 +171,11 @@ public class GameWorld extends JPanel{// implements Observer {
     }
     
     public void setBackground(){
-	initBackground();
 	width = background.getWidth(this);
 	height = background.getHeight(this);
 	setPreferredSize(new Dimension(width, height));
 	gameMap = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	
     }
-    
     public void setGameLists() {
 	//GOList = new ArrayList<>();
 	tankList = new ArrayList<>();
@@ -197,7 +184,6 @@ public class GameWorld extends JPanel{// implements Observer {
     }
     
    
-   //Movement implement by Moses
    private void initTanks(){
         tank1 = new Tank(70, 600,(short) 0, tankImage1,player1, 32, 32);
         tank2 = new Tank(1080, 50,(short) 0,tankImage2,player2, 32, 32);
@@ -206,7 +192,6 @@ public class GameWorld extends JPanel{// implements Observer {
         this.tankControls.addObserver(tank1);
         this.tankControls.addObserver(tank2);
     }
-
    private void initTimer(){     
         timer = new Timer(1000/144, (ActionEvent e) -> {
             GameWorld.this.detectCollision();
@@ -217,7 +202,6 @@ public class GameWorld extends JPanel{// implements Observer {
         player1 = new KeyMapping(KeyEvent.VK_UP,KeyEvent.VK_RIGHT,KeyEvent.VK_DOWN,KeyEvent.VK_LEFT,KeyEvent.VK_ENTER);
         player2 = new KeyMapping(KeyEvent.VK_W,KeyEvent.VK_D,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_SPACE);
     }
-    
     //collision detection
     public void detectCollision(){
 	//set hitboxes for tanks
@@ -235,12 +219,10 @@ public class GameWorld extends JPanel{// implements Observer {
 	       if(tank1HitBox.intersects(bHitBox)){
 		
                    bWall.setVisibility(false);
-                  // bWallList.remove(bWall);
 	       }
 	       if(tank2HitBox.intersects(bHitBox)){
 		 
                      bWall.setVisibility(false);
-                  //  bWallList.remove(bWall);
 	       }
         }
         for(NormalWall nWall: nWallList){
@@ -254,42 +236,12 @@ public class GameWorld extends JPanel{// implements Observer {
 		    tank2.setX(tank2.getXnonCollision());
                     tank2.setY(tank2.getYnonCollision());
 	       }
-	   }
-        
-/*	for(GameObject GO: GOList){
-	   Rectangle goHitBox = GO.getHitBox();
-	   if(tank1HitBox.intersects(goHitBox)){
-	       tank1.collide(GO);
-	       System.out.println("Collided!");
-	   }
-	   if(tank2HitBox.intersects(goHitBox)){
-	       tank2.collide(GO);
-	       System.out.println("Collided!");
-	   }
-	   for(BreakableWall bWall: bWallList){
-	       Rectangle bHitBox = bWall.getHitBox();
-	       if(tank1HitBox.intersects(bHitBox) && GO instanceof BreakableWall){
-		   tank1.collide(bWall);
-		   System.out.println("Collided");
-	       }
-	       if(tank2HitBox.intersects(bHitBox)){
-		   tank2.collide(bWall);
-	       }
-	  }
-	   for(NormalWall nWall: nWallList){
-	       Rectangle nHitBox = nWall.getHitBox();
-	       if(tank1HitBox.intersects(nHitBox) && GO instanceof BreakableWall){
-		   tank1.collide(nWall);
-		   System.out.println("Collided");
-	       }
-	       if(tank2HitBox.intersects(nHitBox)){
-		   tank2.collide(nWall);
-		   System.out.println("Collided!");
-	       }
-	   }
-	}
-    */
-    
+	   }    
     }
-
+    public void drawBullets(Graphics g){
+        for(int i = 0;i<bulletList.size();i++){
+            bulletList.get(i).draw(g);
+            bulletList.get(i).move();
+        }
+    }
 }
