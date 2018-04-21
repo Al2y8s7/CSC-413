@@ -26,34 +26,40 @@ public class Tank extends Movable implements Observer {
     private int lives;
     private int deltaX, deltaY;
     private int nonCollideX,nonCollideY;
+    private int spawnX,spawnY;
     final int r = 5;
     public short angle;
     private KeyMapping keyMap;
     //for collision detection
     protected int xCollide, yCollide;
     private boolean shotsFired, collided;
+    private int player;
+    long lastShoot = System.currentTimeMillis();
+    final long threshold = 1000;
 
     //constructor
-    public Tank(int x, int y, short angle, BufferedImage image, KeyMapping kmap, int width, int length) {
+    public Tank(int x, int y, short angle,int player, BufferedImage image, KeyMapping kmap, int width, int length) {
 	super(x, y, image, width, length);
 	keys = new HashSet();
 	this.keyMap = kmap;
 	this.angle = angle;
 	this.shotsFired = false;
 	collided = false;
+        this.health = 100;
+        this.spawnX = x;
+        this.spawnY = y;
+        this.lives = 3;
+        this.player = player;
     }
     
     @Override
     public void collide(GameObject gameObject) {
-	collided = true;
-	
-
     }
 
     @Override
     public void collide(Tank tank) {
-	collided = true;
-	
+        this.x = nonCollideX;
+        this.y = nonCollideY;
     }
 
     @Override
@@ -64,14 +70,20 @@ public class Tank extends Movable implements Observer {
 
     @Override
     public void collide(NormalWall normalWall) {
-	collided = true;
-	
+	this.x = nonCollideX;
+        this.y = nonCollideY;
     }
-//    
-//    @Override
-//    public void collide(Bullet bullet){
-//        
-//    }
+    
+    @Override
+    public void collide(Bullet bullet){    
+        this.health -= 10;
+            if(health <= 0){
+                --lives;
+                respawn();
+            }
+            bullet.setVisibility(false);
+            System.out.println("Tank's Health: "+ health);
+    }
 //    
 //    @Override
 //    public void collide(BreakableWall breakableWall){
@@ -156,7 +168,11 @@ public class Tank extends Movable implements Observer {
 	    this.moveLeft();
 	}
 	if (keys.contains(keyMap.getShootKey())) {
+            long current = System.currentTimeMillis();
+            if((current - threshold) > lastShoot){
 	    this.shoot();
+            lastShoot = current;
+            }
 	}
     }
 
@@ -172,14 +188,21 @@ public class Tank extends Movable implements Observer {
 	this.nonCollideX = x;
 	this.nonCollideY = y;
     }
-    public int getXnonCollision(){
-        return this.nonCollideX;
-    }
-    public int getYnonCollision(){
-        return this.nonCollideY;
-    }
     public short getAngle(){
         return this.angle;
     }
-    
+    public void respawn(){
+        this.health = 100;
+        this.x = spawnX;
+        this.y = spawnY;
+    }
+    public int getLives(){
+        return this.lives;
+    }
+    public int getHealth(){
+        return this.health;
+    }
+    public int getPlayer(){
+        return this.player;
+    }
 }

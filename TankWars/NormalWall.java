@@ -39,6 +39,11 @@ public class NormalWall extends GameObject {
 	
     }
 
+    @Override
+    public void collide(Bullet bullet) {
+    }
+
+
 
    
     

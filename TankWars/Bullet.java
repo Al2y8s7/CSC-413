@@ -16,10 +16,12 @@ public class Bullet extends Movable {
     int deltaX,deltaY;
     final int r = 8;
     private short angle;
+    private int player;
     //constructor
-    public Bullet(int x, int y, short angle, BufferedImage image,int width,int height){
+    public Bullet(int x, int y, short angle, int player, BufferedImage image,int width,int height){
         super(x,y,image,width,height);
         this.angle = angle;
+        this.player = player;
     }
     
      @Override
@@ -58,11 +60,15 @@ public class Bullet extends Movable {
 	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
 	Graphics2D graphic2D = (Graphics2D) g;
 	graphic2D.drawImage(this.getImage(), rotation, null);
+        graphic2D.draw(this.getHitBox());
     }
     public void move(){
         deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
 	deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
 	x += deltaX;
 	y += deltaY;
+    }
+    public int getPlayer(){
+        return this.player;
     }
 }

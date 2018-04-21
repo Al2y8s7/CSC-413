@@ -9,9 +9,11 @@ import java.util.Observable;
  * 3/21/18
  */
 public class PowerUp extends GameObject {
+    int powerUpType;
     //constructor
-    public PowerUp(int x, int y, BufferedImage image, int z, int w){
+    public PowerUp(int x, int y, int type, BufferedImage image, int z, int w){
         super(x,y,image, w , z);
+        this.powerUpType = type;
     }
     @Override
     public void collide(GameObject gameObject){
@@ -20,7 +22,13 @@ public class PowerUp extends GameObject {
     
     @Override
     public void collide(Tank tank){
-        
+        if(powerUpType == 1){
+        tank.setHealth(100);
+        this.setVisibility(false);
+        }
+        else if(powerUpType == 2){
+            
+        }
     }
     
     public void collide(Bullet bullet){
@@ -45,7 +53,6 @@ public class PowerUp extends GameObject {
 
     @Override
     public void collide(NormalWall normalWall) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
