@@ -48,6 +48,16 @@ public class BreakableWall extends GameObject {
 //    public void collide(Bullet bullet) {
 //	
 //    }
+
+    @Override
+    public void collide(Bullet bullet) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void collide(PowerUp powerUp) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

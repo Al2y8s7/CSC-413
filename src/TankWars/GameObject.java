@@ -76,7 +76,7 @@ public abstract class GameObject extends Observable implements Observer {
 
     public abstract void collide(NormalWall normalWall);
 
-   //public abstract void collide(Bullet bullet);
-//    
-//    public abstract void collide(PowerUp powerUp);
+   public abstract void collide(Bullet bullet);
+   
+   public abstract void collide(PowerUp powerUp);
 }

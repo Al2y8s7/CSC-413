@@ -25,35 +25,41 @@ public class Tank extends Movable implements Observer {
     private int ammo;
     private int lives;
     private int deltaX, deltaY;
-    final int r = 10;
-    private short angle;
+    private int nonCollideX,nonCollideY;
+    private int spawnX,spawnY;
+    final int r = 5;
+    public short angle;
     private KeyMapping keyMap;
     //for collision detection
     protected int xCollide, yCollide;
-    private int nonCollideX, nonCollideY;
     private boolean shotsFired, collided;
+    private int player;
+    long lastShoot = System.currentTimeMillis();
+    final long threshold = 1000;
 
     //constructor
-    public Tank(int x, int y, short angle, BufferedImage image, KeyMapping kmap, int width, int length) {
+    public Tank(int x, int y, short angle,int player, BufferedImage image, KeyMapping kmap, int width, int length) {
 	super(x, y, image, width, length);
 	keys = new HashSet();
 	this.keyMap = kmap;
 	this.angle = angle;
 	this.shotsFired = false;
 	collided = false;
+        this.health = 100;
+        this.spawnX = x;
+        this.spawnY = y;
+        this.lives = 3;
+        this.player = player;
     }
-
+    
     @Override
     public void collide(GameObject gameObject) {
-	collided = true;
-	
-
     }
 
     @Override
     public void collide(Tank tank) {
-	collided = true;
-	
+        this.x = nonCollideX;
+        this.y = nonCollideY;
     }
 
     @Override
@@ -64,14 +70,20 @@ public class Tank extends Movable implements Observer {
 
     @Override
     public void collide(NormalWall normalWall) {
-	collided = true;
-	
+	this.x = nonCollideX;
+        this.y = nonCollideY;
     }
-//    
-//    @Override
-//    public void collide(Bullet bullet){
-//        
-//    }
+    
+    @Override
+    public void collide(Bullet bullet){    
+        this.health -= 10;
+            if(health <= 0){
+                --lives;
+                respawn();
+            }
+            bullet.setVisibility(false);
+            System.out.println("Tank's Health: "+ health);
+    }
 //    
 //    @Override
 //    public void collide(BreakableWall breakableWall){
@@ -84,25 +96,11 @@ public class Tank extends Movable implements Observer {
 //    }
 //   
     
-    public void NonCollisionCoord(){
-	this.nonCollideX = x;
-	this.nonCollideY = y;
-		
-    }
-    
-    public int getXnonCollision(){
-	return this.nonCollideX;
-    }
-    
-    public int getYnonCollision(){
-	return this.nonCollideY;
-    }
-    
     @Override
     public void update(Observable o, Object obj) {
 	Controller controller = (Controller) o;
 	keys = controller.getKeys();
-	NonCollisionCoord();
+        NonCollisionCoord();
 	MoveTanks();
     }
 
@@ -149,11 +147,11 @@ public class Tank extends Movable implements Observer {
     }
 
     public void moveLeft() {
-	this.angle -= 10;
+	this.angle -= 5;
     }
 
     public void moveRight() {
-	this.angle += 10;
+	this.angle += 5;
     }
 
     private void MoveTanks() {
@@ -170,7 +168,11 @@ public class Tank extends Movable implements Observer {
 	    this.moveLeft();
 	}
 	if (keys.contains(keyMap.getShootKey())) {
+            long current = System.currentTimeMillis();
+            if((current - threshold) > lastShoot){
 	    this.shoot();
+            lastShoot = current;
+            }
 	}
     }
 
@@ -180,7 +182,32 @@ public class Tank extends Movable implements Observer {
 	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
 	Graphics2D graphic2D = (Graphics2D) g;
 	graphic2D.drawImage(this.getImage(), rotation, null);
-
+        graphic2D.draw(this.getHitBox());
+    }
+    public void NonCollisionCoord(){
+	this.nonCollideX = x;
+	this.nonCollideY = y;
+    }
+    public short getAngle(){
+        return this.angle;
+    }
+    public void respawn(){
+        this.health = 100;
+        this.x = spawnX;
+        this.y = spawnY;
+    }
+    public int getLives(){
+        return this.lives;
+    }
+    public int getHealth(){
+        return this.health;
+    }
+    public int getPlayer(){
+        return this.player;
     }
 
+    @Override
+    public void collide(PowerUp powerUp) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
