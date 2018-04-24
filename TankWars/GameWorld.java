@@ -34,9 +34,9 @@ public class GameWorld extends JPanel{// implements Observer {
 
     //used for update method
     private Tank tank1, tank2;
-    private BufferedImage background; 
-    private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls,water;
-    private static BufferedImage bulletImage, smallExplosion, largeExplosion, powerUp1, shield;
+   private BufferedImage background, miniMap, tank1View;
+    private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls, water;
+    private static BufferedImage bulletImage, smallExplosion, largeExplosion, powerUp1, shield, lives;
     private int width, height;
     
     private Controller tankControls;
@@ -82,6 +82,7 @@ public class GameWorld extends JPanel{// implements Observer {
         drawBullets(g);
         drawHealthBars(g);
         drawPowerUps(g);
+        drawLives(g);
 	for(NormalWall nWall: nWallList){
 	    //draws coordinates for single normal wall
 	    g.drawImage(nWall.getImage(), nWall.getX(), nWall.getY(), null);
@@ -97,7 +98,7 @@ public class GameWorld extends JPanel{// implements Observer {
 		g.drawImage(bWall.getImage(), bWall.getX(), bWall.getY(), null);
 		worldMapGraphics.drawImage(bWall.getImage(), bWall.getX(), bWall.getY(), null);
 	    }
-	}
+	} 
     }
         public void setMap() {
 	//instantiate World
@@ -143,6 +144,7 @@ public class GameWorld extends JPanel{// implements Observer {
             largeExplosion = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Explosion_large.gif"));
 	    powerUp1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Herramienta.png"));
             shield = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shield1.gif"));
+            lives = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Heart.png"));
 
 	}catch(IOException ex){
 	    ex.printStackTrace();
@@ -334,4 +336,13 @@ public class GameWorld extends JPanel{// implements Observer {
             }
         }
     }
+    public void drawLives(Graphics g){    
+        for(int i = 0; i<tank1.getLives();i++){
+            g.drawImage(lives, tank1.getX()+(i*20), tank1.getY()+tank1.getImageHeight()-5, null);
+        }
+        for(int i = 0; i<tank2.getLives();i++){
+            g.drawImage(lives, tank2.getX()+(i*20), tank2.getY()+tank2.getImageHeight()-5, null);
+        }
+    }
+    
 }

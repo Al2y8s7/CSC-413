@@ -11,6 +11,8 @@ import javax.swing.JFrame;
  * @author Alvin Nguyen & Moses Martinez
  */
 public class Main extends JFrame {
+    protected final static int WINDOW_WIDTH = 1312;
+    protected final static int WINDOW_HEIGHT = 832;
 
     public static void main(String[] args) {
 	Main newGame = new Main();
@@ -21,7 +23,7 @@ public class Main extends JFrame {
     public void gameStart() {
 	//set game window
 	setTitle("Tank Wars");
-	setSize(1318, 832);
+	setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	setLocation(new Point(200, 200));
 	add(new GameWorld());
 	setResizable(false);
