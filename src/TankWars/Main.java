@@ -14,8 +14,8 @@ import javax.swing.JLabel;
  */
 public class Main extends JFrame {
     
-    protected final static int WINDOW_WIDTH = 1312;
-    protected final static int WINDOW_HEIGHT = 832;
+    final static int WINDOW_WIDTH = 1417;
+    final static int WINDOW_HEIGHT = 832;
 
     public static void main(String[] args) {
 	Main newGame = new Main();

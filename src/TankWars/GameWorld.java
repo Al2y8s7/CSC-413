@@ -30,14 +30,15 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Alvin Nguyen & Moses Martinez This class handles all in-game objects (game objects) Utilizes ActionsEvents and checks for updates from Observers
+ * @author Alvin Nguyen & Moses Martinez 
+ * This class handles all in-game objects (game objects) Utilizes ActionsEvents and checks for updates from Observers
  *
  */
-public class GameWorld extends JPanel {// implements Observer {
+public class GameWorld extends JPanel implements Observer {// implements Observer {
 
     //used for update method
     private Tank tank1, tank2;
-    private BufferedImage background, miniMap, tank1View;
+    private BufferedImage background, miniMap, tank1View, tank2View, leftScreen, rightScreen;
     private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls, water;
     private static BufferedImage bulletImage, smallExplosion, largeExplosion, powerUp1, shield;
     private int width, height;
@@ -78,20 +79,33 @@ public class GameWorld extends JPanel {// implements Observer {
     //draw objects to game window
     public void paintComponent(Graphics g) {
 	super.printComponents(g);
-	worldMapGraphics = gameMap.createGraphics();
-	//draw background
-	g.drawImage(background, 0, 0, null);
-	drawWalls(g);
-	drawExplosions(g);
-	tank1.draw(g);
-	tank2.draw(g);
-	drawBullets(g);
-	drawHealthBars(g);
-	drawPowerUps(g);
+//	worldMapGraphics = gameMap.createGraphics();
+//	//draw background
+//	g.drawImage(background, 0, 0, null);
+//	drawExplosions(g);
+//	drawWalls(g);
+//	tank1.draw(g);
+//	tank2.draw(g);
+//	drawBullets(g);
+//	drawHealthBars(g);
+//	drawPowerUps(g);
+        drawEverything();
 	splitScreen(g);
 	setMiniMap(g);
 	graphics2D.dispose();
 	g.dispose();
+    }
+    
+    private void drawEverything(){
+	worldMapGraphics = gameMap.createGraphics();
+	 worldMapGraphics.drawImage(background, 0, 0, null);
+	drawExplosions(worldMapGraphics);
+	drawWalls(worldMapGraphics);
+	tank1.draw(worldMapGraphics);
+	tank2.draw(worldMapGraphics);
+	drawBullets(worldMapGraphics);
+	drawHealthBars(worldMapGraphics);
+	drawPowerUps(worldMapGraphics);
     }
 
     public void setMap() {
@@ -104,7 +118,7 @@ public class GameWorld extends JPanel {// implements Observer {
 	int[][] GameMap = currMap.getGameMap();
 	//tile map with walls
 	for (int y = 0; y < 25; y++) {
-	    for (int x = 0; x <= 40; x++) {
+	    for (int x = 0; x <= 43; x++) {
 		if (GameMap[y][x] == 1) {
 		    normalWalls = new NormalWall(x * 32, y * 32, nWalls, 32, 32);
 		    nWallList.add(normalWalls);
@@ -147,7 +161,7 @@ public class GameWorld extends JPanel {// implements Observer {
 	graphics2D = (Graphics2D) g;
 	miniMap = op.filter(gameMap, miniMap);
 	worldMapGraphics.drawImage(background, 0, 0, null);
-	g.drawImage(miniMap, 480, 568, null);
+	g.drawImage(miniMap, 520, 568, null);
 	//draws tanks with rotation
 	worldMapGraphics.drawImage(tank1.getImage(), tank1.getX(), tank1.getY(), null);
 	worldMapGraphics.drawImage(tank2.getImage(), tank2.getX(), tank2.getY(), null);
@@ -155,12 +169,15 @@ public class GameWorld extends JPanel {// implements Observer {
     }
 
     public void splitScreen(Graphics g) {
-//        tankImage1 = this.gameMap.getSubimage(tankXoffset(tank1), tankYoffset(tank1), WINDOW_WIDTH / 2, 20);
-//	worldMapGraphics.drawImage(tankImage1, 0, 0, null);
-//	tankImage2 = gameMap.getSubimage(tankXoffset(tank2), tankYoffset(tank2), WINDOW_WIDTH / 2, 20);
-//	worldMapGraphics.drawImage(tankImage2, 0, 0, null);
-	tank1View = gameMap.getSubimage(tank1.getX() , tank1.getY(), WINDOW_WIDTH / 4, 200);
-	g.drawImage(tank1View, WINDOW_WIDTH / 200, WINDOW_HEIGHT / 2, game);
+	//leftScreen = gameMap.getSubimage(200, 200, 200, 200);
+	//rightScreen = gameMap.getSubimage(tankXoffset(tank2), tankYoffset(tank2), WINDOW_WIDTH / 2, WINDOW_HEIGHT);
+	//left Screen
+	leftScreen = gameMap.getSubimage(0, 0, WINDOW_WIDTH / 2 - 21, 800);
+	g.drawImage(leftScreen, 0, 0, null);
+	//right Screen
+	rightScreen = gameMap.getSubimage(WINDOW_WIDTH / 2 - 22, 0, WINDOW_WIDTH / 2 + 15, 800);
+	g.drawImage(rightScreen, (WINDOW_WIDTH / 2 - 20), 0, null);
+	
 	
 
     }
@@ -404,5 +421,19 @@ public class GameWorld extends JPanel {// implements Observer {
 		g.drawImage(power.getImage(), power.getX(), power.getY(), null);
 	    }
 	}
+    }
+    
+//    public void drawLives(Graphics g){    
+//        for(int i = 0; i<tank1.getLives();i++){
+//            g.drawImage(lives, tank1.getX()+(i*20), tank1.getY()+tank1.getImageHeight()-5, null);
+//        }
+//        for(int i = 0; i<tank2.getLives();i++){
+//            g.drawImage(lives, tank2.getX()+(i*20), tank2.getY()+tank2.getImageHeight()-5, null);
+//        }
+//    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
