@@ -60,6 +60,8 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
     Graphics dbg;
     Image dbImage;
     GameWorld game;
+    
+    Music gameMusic;
 
     protected int tankXoffset, tankYoffset;
 
@@ -74,6 +76,8 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
 	initTanks();
 	initTimer();
 	timer.start();
+	gameMusic.music();
+
     }
 
     //draw objects to game window
@@ -222,7 +226,7 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
 	    bulletImage = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shell.gif"));
 	    smallExplosion = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Explosion_small.gif"));
 	    largeExplosion = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Explosion_large.gif"));
-	    powerUp1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Pickup.gif"));
+	    powerUp1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Herramienta.png"));
 	    shield = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shield1.gif"));
 
 	} catch (IOException ex) {
