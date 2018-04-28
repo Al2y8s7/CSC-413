@@ -14,7 +14,7 @@ import java.util.Observer;
  */
 public class Bullet extends Movable {
     int deltaX,deltaY;
-    final int r = 8;
+    final int r = 15;
     private short angle;
     private int player;
     //constructor

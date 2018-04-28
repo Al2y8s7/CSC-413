@@ -43,9 +43,10 @@ Option 1:
 
 After dowloading the repository from GitHub, create a new project in NetBeans with existing Resources.  Select the project and right click, choose clean and build. Run the project by pressing the green play button located at the toolbar section or right clicking on the project and selecting "Run."
 
+
 Option 2:
 
-Navigate to the dist folder under the project directory. Double click on the TankWars executable jar file or right click and select "Open."
+Navigate to the dist folder under the project directory. Double click on the TankWars executable jar (TankWars.jar) file or right click and select "Open."
 
 
 !!! Important Notes !!!

@@ -31,16 +31,16 @@ import javax.swing.JPanel;
 /**
  *
  * @author Alvin Nguyen & Moses Martinez 
- * This class handles all in-game objects (game objects) Utilizes ActionsEvents and checks for updates from Observers
+ * This class handles all in-game objects (game objects)
  *
  */
-public class GameWorld extends JPanel implements Observer {// implements Observer {
+public class GameWorld extends JPanel {
 
     //used for update method
     private Tank tank1, tank2;
     private BufferedImage background, miniMap, tank1View, tank2View, leftScreen, rightScreen;
     private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls, water;
-    private static BufferedImage bulletImage, smallExplosion, largeExplosion, powerUp1, shield;
+    private static BufferedImage bullet1, bullet2, smallExplosion, largeExplosion, powerUp1, shield, lives;
     private int width, height;
 
     private Controller tankControls;
@@ -60,8 +60,13 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
     Graphics dbg;
     Image dbImage;
     GameWorld game;
-    
+
     Music gameMusic;
+
+    //tank 1
+    int tankX1bounds, tankY1bounds;
+    //tank 2
+    int tankX2bounds, tankY2bounds;
 
     protected int tankXoffset, tankYoffset;
 
@@ -83,26 +88,16 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
     //draw objects to game window
     public void paintComponent(Graphics g) {
 	super.printComponents(g);
-//	worldMapGraphics = gameMap.createGraphics();
-//	//draw background
-//	g.drawImage(background, 0, 0, null);
-//	drawExplosions(g);
-//	drawWalls(g);
-//	tank1.draw(g);
-//	tank2.draw(g);
-//	drawBullets(g);
-//	drawHealthBars(g);
-//	drawPowerUps(g);
-        drawEverything();
+	drawEverything();
 	splitScreen(g);
 	setMiniMap(g);
 	graphics2D.dispose();
 	g.dispose();
     }
-    
-    private void drawEverything(){
+
+    private void drawEverything() {
 	worldMapGraphics = gameMap.createGraphics();
-	 worldMapGraphics.drawImage(background, 0, 0, null);
+	worldMapGraphics.drawImage(background, 0, 0, null);
 	drawExplosions(worldMapGraphics);
 	drawWalls(worldMapGraphics);
 	tank1.draw(worldMapGraphics);
@@ -173,24 +168,54 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
     }
 
     public void splitScreen(Graphics g) {
-	//leftScreen = gameMap.getSubimage(200, 200, 200, 200);
-	//rightScreen = gameMap.getSubimage(tankXoffset(tank2), tankYoffset(tank2), WINDOW_WIDTH / 2, WINDOW_HEIGHT);
 	//left Screen
 	leftScreen = gameMap.getSubimage(0, 0, WINDOW_WIDTH / 2 - 21, 800);
 	g.drawImage(leftScreen, 0, 0, null);
 	//right Screen
 	rightScreen = gameMap.getSubimage(WINDOW_WIDTH / 2 - 22, 0, WINDOW_WIDTH / 2 + 15, 800);
 	g.drawImage(rightScreen, (WINDOW_WIDTH / 2 - 20), 0, null);
-	
-	
 
+	//tank1View = gameMap.getSubimage(tankX1bounds, tankY1bounds, WINDOW_WIDTH / 2 - 21, WINDOW_HEIGHT /2);
+	//tank2View = gameMap.getSubimage(tankX2bounds, tankY2bounds, WINDOW_WIDTH / 2 - 22, WINDOW_HEIGHT /2);
+	//tankViewBounds();
+	
+	//g.drawImage(tank1View, 0, 0, game);
+	//g.drawImage(tank2View, WINDOW_WIDTH / 2 - 22, 0, game);
+	//right Screen
+
+	//tank1View = gameMap.getSubimage(tankXmid, tankYmid, tank1.getImageWidth(), tank1.getImageHeight());
+    }
+
+    public void tankViewBounds() {
+
+	if ((tankX1bounds = tank1.getMiddleX() - WINDOW_WIDTH / 4) < 0) {
+	    tankX1bounds = 0;
+	} else if ((tankX1bounds >= WINDOW_WIDTH - WINDOW_WIDTH / 2)) {
+	    tankX1bounds = WINDOW_WIDTH - WINDOW_WIDTH / 2;
+	}
+	if ((tankY1bounds = tank1.getMiddleY() - WINDOW_HEIGHT / 2) < 0) {
+	    tankY1bounds = 0;
+	} else if ((tankY1bounds >= WINDOW_HEIGHT)) {
+	    tankY1bounds = WINDOW_HEIGHT;
+	    System.out.println(tankY1bounds);
+	}
+	if ((tankX2bounds = tank2.getMiddleX() - WINDOW_WIDTH / 4) < 0) {
+	    tankX2bounds = 0;
+	} else if ((tankX2bounds >= WINDOW_WIDTH - WINDOW_WIDTH / 2)) {
+	    tankX2bounds = WINDOW_WIDTH - WINDOW_WIDTH / 2;
+	}
+	if ((tankY2bounds = tank2.getMiddleY() - WINDOW_HEIGHT / 2) < 0) {
+	    tankY2bounds = 0;
+	} else if ((tankY2bounds >= WINDOW_HEIGHT)) {
+	    tankY2bounds = WINDOW_HEIGHT;
+	}
     }
 
     //get Xoffset for tank
     public int tankXoffset(Tank tank) {
 	tankXoffset = ((tank.getX() + tank.getImageWidth() / 2) - (WINDOW_WIDTH / 2));
-	if (tank.getX() + tankXoffset <= 0) {
-	    return 0;
+	if (tank.getX() + tankXoffset < 0) {
+	    return WINDOW_WIDTH / 2;
 	} else if (tank.getX() + tankXoffset > 0 && tank.getX() + tankXoffset < gameMap.getWidth() + WINDOW_WIDTH / 4) {
 	    return (tank.getX() + tankXoffset) / 2;
 	} else if (tank.getX() + tankXoffset >= gameMap.getWidth() + WINDOW_WIDTH / 4) {
@@ -204,7 +229,7 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
     public int tankYoffset(Tank tank) {
 	tankYoffset = ((tank.getY() + tank.getImageHeight() / 2) - (WINDOW_HEIGHT / 2));
 	if (tank.getY() + tankYoffset <= 0) {
-	    return 0;
+	    return WINDOW_HEIGHT / 2;
 	} else if (tank.getY() + tankYoffset > 0 && tank.getY() + tankYoffset < gameMap.getHeight() + WINDOW_HEIGHT) {
 	    return (tank.getY() + tankYoffset);
 	} else if (tank.getY() + tankYoffset >= this.gameMap.getHeight() + WINDOW_HEIGHT) {
@@ -217,17 +242,18 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
     //load background, tanks, walls and other game objects
     public void initResources() {
 	try {
-	    background = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Background.bmp"));
+	    background = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Background2.png"));
 	    tankImage1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Standard_Tank.png"));
 	    tankImage2 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Standard_Tank.png"));
 	    nWalls = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Wall1.gif"));
 	    bWalls = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Wall2.gif"));
-	    water = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/water.png"));
-	    bulletImage = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shell.gif"));
+	    bullet1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/BulletBill.png"));
+	    bullet2 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/BulletBill2.png"));
 	    smallExplosion = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Explosion_small.gif"));
 	    largeExplosion = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Explosion_large.gif"));
 	    powerUp1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Herramienta.png"));
 	    shield = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shield1.gif"));
+	    lives = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Heart.png"));
 
 	} catch (IOException ex) {
 	    ex.printStackTrace();
@@ -237,7 +263,7 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
     public void setBackground() {
 	width = background.getWidth(this);
 	height = background.getHeight(this);
-	setPreferredSize(new Dimension(width, height));
+	setPreferredSize(new Dimension(width, height ));
 	gameMap = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
 
@@ -248,13 +274,13 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
 	bWallList = new ArrayList<>();
     }
 
-     private void initTanks(){
-        tank1 = new Tank(70, 600,(short) 0,1, tankImage1,player1, 32, 32);
-        tank2 = new Tank(1080, 50,(short) 0,2,tankImage2,player2, 32, 32);
-        tankControls = new Controller();
-        addKeyListener(tankControls.getKeyAdapter());
-        this.tankControls.addObserver(tank1);
-        this.tankControls.addObserver(tank2);
+    private void initTanks() {
+	tank1 = new Tank(70, 600, (short) 0, 1, tankImage1, player1, 32, 32);
+	tank2 = new Tank(1080, 50, (short) 180, 2, tankImage2, player2, 32, 32);
+	tankControls = new Controller();
+	addKeyListener(tankControls.getKeyAdapter());
+	this.tankControls.addObserver(tank1);
+	this.tankControls.addObserver(tank2);
     }
 
     private void initTimer() {
@@ -369,13 +395,13 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
 
     public void checkShooting() {
 	if (tank1.getShoot() == true) {
-	    Bullet bullet = new Bullet(tank1.getX() + (tank1.getImageWidth() / 2), tank1.getY() + (tank1.getImageHeight() / 2), tank1.getAngle(), 1, bulletImage, 1, 1);
+	    Bullet bullet = new Bullet(tank1.getX() + (tank1.getImageWidth() / 2), tank1.getY() + (tank1.getImageHeight() / 2), tank1.getAngle(), 1, bullet1, 1, 1);
 	    bulletList.add(bullet);
 	    tank1.setShoot(false);
 	}
 
 	if (tank2.getShoot() == true) {
-	    Bullet bullet = new Bullet(tank2.getX(), tank2.getY(), tank2.getAngle(), 2, bulletImage, 1, 1);
+	    Bullet bullet = new Bullet(tank2.getX(), tank2.getY(), tank2.getAngle(), 2, bullet2, 1, 1);
 	    bulletList.add(bullet);
 	    tank2.setShoot(false);
 	}
@@ -426,18 +452,13 @@ public class GameWorld extends JPanel implements Observer {// implements Observe
 	    }
 	}
     }
-    
-//    public void drawLives(Graphics g){    
-//        for(int i = 0; i<tank1.getLives();i++){
-//            g.drawImage(lives, tank1.getX()+(i*20), tank1.getY()+tank1.getImageHeight()-5, null);
-//        }
-//        for(int i = 0; i<tank2.getLives();i++){
-//            g.drawImage(lives, tank2.getX()+(i*20), tank2.getY()+tank2.getImageHeight()-5, null);
-//        }
-//    }
 
-    @Override
-    public void update(Observable o, Object arg) {
-	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void drawLives(Graphics g) {
+	for (int i = 0; i < tank1.getLives(); i++) {
+	    g.drawImage(lives, tank1.getX() + (i * 20), tank1.getY() + tank1.getImageHeight() - 5, null);
+	}
+	for (int i = 0; i < tank2.getLives(); i++) {
+	    g.drawImage(lives, tank2.getX() + (i * 20), tank2.getY() + tank2.getImageHeight() - 5, null);
+	}
     }
 }

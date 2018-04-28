@@ -1,5 +1,6 @@
 package TankWars;
 
+import static TankWars.Main.WINDOW_WIDTH;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -27,7 +28,7 @@ public class Tank extends Movable implements Observer {
     private int deltaX, deltaY;
     private int nonCollideX,nonCollideY;
     private int spawnX,spawnY;
-    final int r = 5;
+    final int r = 15;
     public short angle;
     private KeyMapping keyMap;
     //for collision detection
@@ -132,26 +133,26 @@ public class Tank extends Movable implements Observer {
         return this.shotsFired;
     }
 
-    public void moveUp() {
+    public synchronized void moveUp() {
 	deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
 	deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
 	x += deltaX;
 	y += deltaY;
     }
 
-    public void moveDown() {
+    public synchronized void moveDown() {
 	deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
 	deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
 	x -= deltaX;
 	y -= deltaY;
     }
 
-    public void moveLeft() {
-	this.angle -= 5;
+    public synchronized void moveLeft() {
+	this.angle -= 10;
     }
 
-    public void moveRight() {
-	this.angle += 5;
+    public synchronized void moveRight() {
+	this.angle += 10;
     }
 
     private void MoveTanks() {
@@ -182,7 +183,7 @@ public class Tank extends Movable implements Observer {
 	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
 	Graphics2D graphic2D = (Graphics2D) g;
 	graphic2D.drawImage(this.getImage(), rotation, null);
-        graphic2D.draw(this.getHitBox());
+        //graphic2D.draw(this.getHitBox());
     }
     public void NonCollisionCoord(){
 	this.nonCollideX = x;
@@ -209,5 +210,13 @@ public class Tank extends Movable implements Observer {
     @Override
     public void collide(PowerUp powerUp) {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public int getMiddleX(){
+	return this.getX() + this.getImageWidth() / 2;
+    }
+    
+    public int getMiddleY(){
+	return this.getY() + this.getImageHeight() / 2;
     }
 }
