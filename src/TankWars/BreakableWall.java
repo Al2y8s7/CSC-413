@@ -39,7 +39,6 @@ public class BreakableWall extends GameObject {
 	
     }
 
-    @Override
     public void update(Observable o, Object arg) {
 	
     }
@@ -54,7 +53,6 @@ public class BreakableWall extends GameObject {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
     public void collide(PowerUp powerUp) {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

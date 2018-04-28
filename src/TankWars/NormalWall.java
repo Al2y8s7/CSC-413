@@ -39,7 +39,6 @@ public class NormalWall extends GameObject {
 	
     }
 
-    @Override
     public void update(Observable o, Object arg) {
 
     }
@@ -49,7 +48,6 @@ public class NormalWall extends GameObject {
 	
     }
 
-    @Override
     public void collide(PowerUp powerUp) {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

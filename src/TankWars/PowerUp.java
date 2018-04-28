@@ -41,7 +41,6 @@ public class PowerUp extends GameObject {
         
     }
     
-    @Override
     public void collide(PowerUp powerUp){
         
     }
@@ -58,7 +57,6 @@ public class PowerUp extends GameObject {
     public void collide(NormalWall normalWall) {
     }
     
-    @Override
     public void update(Observable obj,Object o){
 	
     }

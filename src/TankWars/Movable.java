@@ -33,7 +33,6 @@ public abstract class Movable extends GameObject{
     public void collide(BreakableWall breakableWall) {
     }
 
-    @Override
     public void collide(PowerUp powerUp) {
     }
 

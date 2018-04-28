@@ -39,7 +39,7 @@ public class GameWorld extends JPanel {
     //used for update method
     private Tank tank1, tank2;
     private BufferedImage background, miniMap, tank1View, tank2View, leftScreen, rightScreen;
-    private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls, water;
+    private static BufferedImage gameMap, tankImage1, tankImage2, nWalls, bWalls, winner,winner2;
     private static BufferedImage bullet1, bullet2, smallExplosion, largeExplosion, powerUp1, shield, lives;
     private int width, height;
 
@@ -104,7 +104,9 @@ public class GameWorld extends JPanel {
 	tank2.draw(worldMapGraphics);
 	drawBullets(worldMapGraphics);
 	drawHealthBars(worldMapGraphics);
+	drawLives(worldMapGraphics);
 	drawPowerUps(worldMapGraphics);
+	drawWinner(worldMapGraphics);
     }
 
     public void setMap() {
@@ -254,6 +256,8 @@ public class GameWorld extends JPanel {
 	    powerUp1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Herramienta.png"));
 	    shield = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shield1.gif"));
 	    lives = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Heart.png"));
+	    winner = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Winner.png"));
+            winner2 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/player2.png"));
 
 	} catch (IOException ex) {
 	    ex.printStackTrace();
@@ -420,25 +424,25 @@ public class GameWorld extends JPanel {
 	}
     }
 
-    public void drawHealthBars(Graphics g) {
-	g.setColor(Color.red);
-	g.fillRect(40, 725, 200, 40);
-
-	g.setColor(Color.green);
-	g.fillRect(40, 725, tank1.getHealth() * 2, 40);
-
-	g.setColor(Color.white);
-	g.drawRect(40, 725, 200, 40);
-
-	g.setColor(Color.red);
-	g.fillRect(1050, 725, 200, 40);
-
-	g.setColor(Color.green);
-	g.fillRect(1050, 725, tank2.getHealth() * 2, 40);
-
-	g.setColor(Color.white);
-	g.drawRect(1050, 725, 200, 40);
-
+   public void drawHealthBars(Graphics g){
+        g.setColor(Color.red);
+        g.fillRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), 100, 20);
+        
+        g.setColor(Color.green);
+        g.fillRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), tank1.getHealth(), 20);
+        
+        g.setColor(Color.white);
+        g.drawRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), 100, 20);
+        
+        g.setColor(Color.red);
+        g.fillRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), 100, 20);
+        
+        g.setColor(Color.green);
+        g.fillRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), tank2.getHealth(), 20);
+        
+        g.setColor(Color.white);
+        g.drawRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), 100, 20);
+        
     }
 
     public void drawPowerUps(Graphics g) {
@@ -460,5 +464,16 @@ public class GameWorld extends JPanel {
 	for (int i = 0; i < tank2.getLives(); i++) {
 	    g.drawImage(lives, tank2.getX() + (i * 20), tank2.getY() + tank2.getImageHeight() - 5, null);
 	}
+    }
+    
+     public void drawWinner(Graphics g){
+        if(tank1.getLives() == 0){
+                g.drawImage(winner2, 0, 0, null);
+                timer.stop();
+            }
+            if(tank2.getLives() == 0){
+                 g.drawImage(winner, 0, 0, null);
+                timer.stop();
+            }
     }
 }
