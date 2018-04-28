@@ -104,6 +104,7 @@ public class GameWorld extends JPanel {
 	tank2.draw(worldMapGraphics);
 	drawBullets(worldMapGraphics);
 	drawHealthBars(worldMapGraphics);
+	drawLives(worldMapGraphics);
 	drawPowerUps(worldMapGraphics);
     }
 
@@ -420,25 +421,25 @@ public class GameWorld extends JPanel {
 	}
     }
 
-    public void drawHealthBars(Graphics g) {
-	g.setColor(Color.red);
-	g.fillRect(40, 725, 200, 40);
-
-	g.setColor(Color.green);
-	g.fillRect(40, 725, tank1.getHealth() * 2, 40);
-
-	g.setColor(Color.white);
-	g.drawRect(40, 725, 200, 40);
-
-	g.setColor(Color.red);
-	g.fillRect(1050, 725, 200, 40);
-
-	g.setColor(Color.green);
-	g.fillRect(1050, 725, tank2.getHealth() * 2, 40);
-
-	g.setColor(Color.white);
-	g.drawRect(1050, 725, 200, 40);
-
+      public void drawHealthBars(Graphics g){
+        g.setColor(Color.red);
+        g.fillRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), 100, 20);
+        
+        g.setColor(Color.green);
+        g.fillRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), tank1.getHealth(), 20);
+        
+        g.setColor(Color.white);
+        g.drawRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), 100, 20);
+        
+        g.setColor(Color.red);
+        g.fillRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), 100, 20);
+        
+        g.setColor(Color.green);
+        g.fillRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), tank2.getHealth(), 20);
+        
+        g.setColor(Color.white);
+        g.drawRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), 100, 20);
+        
     }
 
     public void drawPowerUps(Graphics g) {
