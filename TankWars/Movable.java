@@ -17,24 +17,5 @@ public abstract class Movable extends GameObject{
         super(x,y,image, width, length);
     }
 
-//    @Override
-//    public void collide(GameObject gameObject) {
-//    }
-//
-//    @Override
-//    public void collide(Tank tank) {
-//    }
-//
-//    @Override
-//    public void collide(Bullet bullet) {
-//    }
-//
-//    @Override
-//    public void collide(BreakableWall breakableWall) {
-//    }
-//
-//    @Override
-//    public void collide(PowerUp powerUp) {
-//    }
 
 }

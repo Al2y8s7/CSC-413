@@ -84,18 +84,6 @@ public class Tank extends Movable implements Observer {
             bullet.setVisibility(false);
             System.out.println("Tank's Health: "+ health);
     }
-//    
-//    @Override
-//    public void collide(BreakableWall breakableWall){
-//        
-//    }
-//    
-//    @Override
-//    public void collide(PowerUp powerUp){
-//        
-//    }
-//   
-    
     @Override
     public void update(Observable o, Object obj) {
 	Controller controller = (Controller) o;
@@ -112,14 +100,6 @@ public class Tank extends Movable implements Observer {
 
     public void setHealth(int health) {
 	this.health = health;
-    }
-
-    public int getAmmo(int ammo) {
-	return this.ammo = ammo;
-    }
-
-    public void setAmmo(int ammo) {
-	this.ammo = ammo;
     }
 
     public void shoot() {
@@ -176,13 +156,11 @@ public class Tank extends Movable implements Observer {
 	}
     }
 
-    public void draw(Graphics g) {
-	// super.paintComponent(g);    
+    public void draw(Graphics g) {  
 	AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
 	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
 	Graphics2D graphic2D = (Graphics2D) g;
 	graphic2D.drawImage(this.getImage(), rotation, null);
-        graphic2D.draw(this.getHitBox());
     }
     public void NonCollisionCoord(){
 	this.nonCollideX = x;

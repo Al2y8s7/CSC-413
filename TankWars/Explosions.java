@@ -35,7 +35,6 @@ public class Explosions extends GameObject{
 
     @Override
     public void collide(Bullet bullet) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 

@@ -11,7 +11,7 @@ import java.util.Set;
  *
  * @author mmmos
  */
-public class Controller extends Observable {// implements KeyListener{
+public class Controller extends Observable {
     
     Set<Integer> keys = new HashSet();
     KeyAdapter ka;
@@ -34,26 +34,6 @@ public class Controller extends Observable {// implements KeyListener{
     }
         };
     }
-    
-    
-    /*
-    @Override
-    public void keyTyped(KeyEvent e){ }
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-        System.out.println("Key Pressed: " + e.getKeyCode());
-        keys.add(key); 
-        notifyObservers();
-    }
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        System.out.println("Key Released: " + e.getKeyCode());
-        keys.remove(key);
-        notifyObservers();
-    }
-    */
     public Set<Integer> getKeys(){
         return keys;
     }

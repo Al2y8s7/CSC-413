@@ -14,7 +14,7 @@ import java.util.Observer;
  * isVisible, Collidable, Update, getCoordinates, setCoordinates
  */
 
-public abstract class GameObject {// extends Observable implements Observer{
+public abstract class GameObject {
 
     BufferedImage content;
     protected int x, y, width, height;
@@ -69,11 +69,6 @@ public abstract class GameObject {// extends Observable implements Observer{
     public abstract void collide(BreakableWall breakableWall);
     
     public abstract void collide(NormalWall normalWall);
-    
-    
+      
     public abstract void collide(Bullet bullet);
-//    
-//    public abstract void collide(BreakableWall breakableWall);
-//    
-//    public abstract void collide(PowerUp powerUp);
 }

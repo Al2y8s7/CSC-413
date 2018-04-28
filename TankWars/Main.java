@@ -1,9 +1,7 @@
 package TankWars;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Point;
-import javax.swing.JApplet;
+
 import javax.swing.JFrame;
 
 /**
@@ -23,7 +21,7 @@ public class Main extends JFrame {
     public void gameStart() {
 	//set game window
 	setTitle("Tank Wars");
-	setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	setSize(1417, 832);
 	setLocation(new Point(200, 200));
 	add(new GameWorld());
 	setResizable(false);

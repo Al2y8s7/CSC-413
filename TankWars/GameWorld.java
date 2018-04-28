@@ -1,26 +1,19 @@
 package TankWars;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.File;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 import javax.swing.Timer;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -30,13 +23,13 @@ import javax.swing.JPanel;
  * This class handles all in-game objects (game objects) Utilizes ActionsEvents and checks for updates from Observers
  *
  */
-public class GameWorld extends JPanel{// implements Observer {
+public class GameWorld extends JPanel{
 
     //used for update method
     private Tank tank1, tank2;
-   private BufferedImage background, miniMap, tank1View;
-    private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls, water;
-    private static BufferedImage bulletImage, smallExplosion, largeExplosion, powerUp1, shield, lives;
+    private BufferedImage background, miniMap, tank1View;
+    private static BufferedImage gameMap, tankImage1, tankImage2, payload, nWalls, bWalls, water, winner,winner2;
+    private static BufferedImage bulletImage, smallExplosion, largeExplosion, powerUp1, shield, lives,left,right,leftScreen, rightScreen;;
     private int width, height;
     
     private Controller tankControls;
@@ -45,17 +38,15 @@ public class GameWorld extends JPanel{// implements Observer {
     private KeyMapping player1, player2;
     
     //Arrays lists to store all game objects
-    ArrayList<Explosions> explosionList;
-    ArrayList<Tank> tankList;
-    ArrayList<NormalWall> nWallList;
-    ArrayList<BreakableWall> bWallList;
-    private ArrayList<Bullet> bulletList = new ArrayList<>();
-    private ArrayList<PowerUp> PowerUpList = new ArrayList<>();
+    private ArrayList<Explosions> explosionList;
+    private ArrayList<Tank> tankList;
+    private ArrayList<NormalWall> nWallList;
+    private ArrayList<BreakableWall> bWallList;
+    private ArrayList<Bullet> bulletList;
+    private ArrayList<PowerUp> PowerUpList;
     
-    private Graphics2D worldMapGraphics;
-    Graphics dbg;
-    Image dbImage;
-    GameWorld game;
+   private Graphics2D worldMapGraphics;
+   private Graphics2D lScreen, rScreen;
    
     //constructor
     public GameWorld() {
@@ -70,35 +61,23 @@ public class GameWorld extends JPanel{// implements Observer {
 	timer.start();	
     }
     //draw objects to game window
+    @Override
     public void paintComponent(Graphics g){
 	super.printComponents(g);
 	worldMapGraphics = gameMap.createGraphics();
-	//draw background
-	g.drawImage(background, 0, 0, null);
-        drawExplosions(g);
+      //  worldMapGraphics.drawImage(background, 0, 0, null);
 	//draws tanks with rotation
-	tank1.draw(g);
-	tank2.draw(g);
-        drawBullets(g);
-        drawHealthBars(g);
-        drawPowerUps(g);
-        drawLives(g);
-	for(NormalWall nWall: nWallList){
-	    //draws coordinates for single normal wall
-	    g.drawImage(nWall.getImage(), nWall.getX(), nWall.getY(), null);
-	    //use graphics to draw normal wall
-	    worldMapGraphics.drawImage(nWall.getImage(), nWall.getX(), nWall.getY(), null);
-	}
-	for(int i = 0; i < bWallList.size(); i++){
-	    BreakableWall bWall = bWallList.get(i);
-	    if(!bWall.getVisibility()){
-		bWallList.remove(bWall);
-	    }
-            else{
-		g.drawImage(bWall.getImage(), bWall.getX(), bWall.getY(), null);
-		worldMapGraphics.drawImage(bWall.getImage(), bWall.getX(), bWall.getY(), null);
-	    }
-	} 
+        drawExplosions(worldMapGraphics);
+	tank1.draw(worldMapGraphics);
+	tank2.draw(worldMapGraphics);
+        drawBullets(worldMapGraphics);
+        drawPowerUps(worldMapGraphics);
+        drawWalls(worldMapGraphics);
+        drawHealthBars(worldMapGraphics);
+        drawLives(worldMapGraphics);
+        g.drawImage(gameMap, 0, 0, null);
+        setMiniMap(g);
+        drawWinner(g);
     }
         public void setMap() {
 	//instantiate World
@@ -111,20 +90,25 @@ public class GameWorld extends JPanel{// implements Observer {
 	//tile map with walls
 	for (int y = 0; y < 25; y++){ 
 	    for (int x = 0; x <= 40; x++) {
- 		if (GameMap[y][x] == 1) {
-		    normalWalls = new NormalWall(x * 32, y * 32, nWalls , 32, 32);
-		    nWallList.add(normalWalls);
-		} else if(GameMap[y][x] == 2){
-		   breakableWalls = new BreakableWall(x * 32, y * 32, bWalls, 32, 32);
-		   bWallList.add(breakableWalls);
-		}
-                else if(GameMap[y][x] == 3){
-                    power = new PowerUp(x * 32, y * 32, 1, powerUp1, 32, 32);
-                    PowerUpList.add(power);
-                }
-                else if(GameMap[y][x] == 4){
-                    power = new PowerUp(x * 32, y * 32, 2, shield, 32, 32);
-                    PowerUpList.add(power);
+                switch (GameMap[y][x]) {
+                    case 1:
+                        normalWalls = new NormalWall(x * 32, y * 32, nWalls , 32, 32);
+                        nWallList.add(normalWalls);
+                        break;
+                    case 2:
+                        breakableWalls = new BreakableWall(x * 32, y * 32, bWalls, 32, 32);
+                        bWallList.add(breakableWalls);
+                        break;
+                    case 3:
+                        power = new PowerUp(x * 32, y * 32, 1, powerUp1, 32, 32);
+                        PowerUpList.add(power);
+                        break;
+                    case 4:
+                        power = new PowerUp(x * 32, y * 32, 2, shield, 32, 32);
+                        PowerUpList.add(power);
+                        break;
+                    default:
+                        break;
                 }
 	    }
 	}
@@ -145,27 +129,29 @@ public class GameWorld extends JPanel{// implements Observer {
 	    powerUp1 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Herramienta.png"));
             shield = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Shield1.gif"));
             lives = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Heart.png"));
+            winner = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/Winner.png"));
+            winner2 = ImageIO.read(GameWorld.class.getResource("/TankWars/resources/player2.png"));
 
 	}catch(IOException ex){
-	    ex.printStackTrace();
 	}
     }
-    
     public void setBackground(){
 	width = background.getWidth(this);
 	height = background.getHeight(this);
 	setPreferredSize(new Dimension(width, height));
 	gameMap = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        left = new BufferedImage(320,480,BufferedImage.TYPE_INT_RGB);
+        right = new BufferedImage(320,480,BufferedImage.TYPE_INT_RGB);
     }
     public void setGameLists() {
 	explosionList = new ArrayList<>();
 	tankList = new ArrayList<>();
 	nWallList = new ArrayList<>();
 	bWallList = new ArrayList<>();
+        bulletList = new ArrayList<>();
+        PowerUpList = new ArrayList<>();
     }
-    
-   
-   private void initTanks(){
+    private void initTanks(){
         tank1 = new Tank(70, 600,(short) 0,1, tankImage1,player1, 32, 32);
         tank2 = new Tank(1080, 50,(short) 0,2,tankImage2,player2, 32, 32);
         tankControls = new Controller();
@@ -175,12 +161,6 @@ public class GameWorld extends JPanel{// implements Observer {
     }
    private void initTimer(){     
         timer = new Timer(1000/144, (ActionEvent e) -> {
-            if(tank1.getLives() == 0){
-                System.out.println("Player 2 WINS!!");
-            }
-            if(tank2.getLives() == 0){
-                System.out.println("Player 1 WINS!!");
-            }
             GameWorld.this.checkShooting();
             GameWorld.this.detectCollision();
             GameWorld.this.repaint();
@@ -244,7 +224,7 @@ public class GameWorld extends JPanel{// implements Observer {
                     explosionList.add(explosion);
                 }
                 tank2.collide(bullet);
-                Explosions explosion = new Explosions(bullet.getX(),bullet.getY(),smallExplosion,0,0);
+                Explosions explosion = new Explosions(tank2.getX(),tank2.getY(),smallExplosion,0,0);
                 explosionList.add(explosion);
             }
             if(bullet.getPlayer() != tank1.getPlayer() && tank1HitBox.intersects(hitBoxBullet)){
@@ -253,7 +233,7 @@ public class GameWorld extends JPanel{// implements Observer {
                     explosionList.add(explosion);
                 }
                 tank1.collide(bullet);
-                Explosions explosion = new Explosions(bullet.getX(),bullet.getY(),smallExplosion,0,0);
+                Explosions explosion = new Explosions(tank1.getX(),tank1.getY(),smallExplosion,0,0);
                 explosionList.add(explosion);
             }
         }
@@ -306,22 +286,22 @@ public class GameWorld extends JPanel{// implements Observer {
     }
     public void drawHealthBars(Graphics g){
         g.setColor(Color.red);
-        g.fillRect(40, 725, 200, 40);
+        g.fillRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), 100, 20);
         
         g.setColor(Color.green);
-        g.fillRect(40, 725, tank1.getHealth()*2, 40);
+        g.fillRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), tank1.getHealth(), 20);
         
         g.setColor(Color.white);
-        g.drawRect(40, 725, 200, 40);
+        g.drawRect(tank1.getX()-10, tank1.getY()+tank1.getImageHeight(), 100, 20);
         
         g.setColor(Color.red);
-        g.fillRect(1050, 725, 200, 40);
+        g.fillRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), 100, 20);
         
         g.setColor(Color.green);
-        g.fillRect(1050, 725, tank2.getHealth()*2, 40);
+        g.fillRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), tank2.getHealth(), 20);
         
         g.setColor(Color.white);
-        g.drawRect(1050, 725, 200, 40);
+        g.drawRect(tank2.getX()-10, tank2.getY()+tank2.getImageHeight(), 100, 20);
         
     }
     public void drawPowerUps(Graphics g){
@@ -344,5 +324,52 @@ public class GameWorld extends JPanel{// implements Observer {
             g.drawImage(lives, tank2.getX()+(i*20), tank2.getY()+tank2.getImageHeight()-5, null);
         }
     }
-    
+    public void setMiniMap(Graphics g) {
+	AffineTransform mMap = new AffineTransform();
+	mMap.scale(.20, .20);
+	AffineTransformOp op = new AffineTransformOp(mMap, AffineTransformOp.TYPE_BILINEAR);
+	miniMap = op.filter(gameMap, miniMap);
+	
+	g.drawImage(miniMap, (this.getWidth()/2)-(miniMap.getWidth()/2), this.getHeight()-160, null);
+        
+        worldMapGraphics.drawImage(background, 0, 0, null);
+        tank1.draw(worldMapGraphics);
+        tank2.draw(worldMapGraphics);
+        drawBullets(worldMapGraphics);
+        //drawHealthBars(worldMapGraphics);
+	//draws tanks with rotation
+	//worldMapGraphics.drawImage(tank1.getImage(), tank1.getX(), tank1.getY(), null);
+	//worldMapGraphics.drawImage(tank2.getImage(), tank2.getX(), tank2.getY(), null);
+
+    }
+    public void drawWinner(Graphics g){
+        if(tank1.getLives() == 0){
+                g.drawImage(winner2, 0, 0, null);
+                timer.stop();
+            }
+            if(tank2.getLives() == 0){
+                 g.drawImage(winner, 0, 0, null);
+                timer.stop();
+            }
+    }
+    public void splitScreen(Graphics g){
+       // player1View = new BufferedImage(this.getWidth()/2,this.getHeight(), BufferedImage.TYPE_INT_RGB);
+       // g.drawImage(player1View, tank1.getX(), tank1.getY(), null);
+    }
+    public void drawWalls(Graphics g){
+        for(NormalWall nWall: nWallList){
+	    //draws coordinates for single normal wall
+	    //use graphics to draw normal wall
+	    worldMapGraphics.drawImage(nWall.getImage(), nWall.getX(), nWall.getY(), null);
+	}
+	for(int i = 0; i < bWallList.size(); i++){
+	    BreakableWall bWall = bWallList.get(i);
+	    if(!bWall.getVisibility()){
+		bWallList.remove(bWall);
+	    }
+            else{
+		worldMapGraphics.drawImage(bWall.getImage(), bWall.getX(), bWall.getY(), null);
+	    }
+	} 
+    }
 }
