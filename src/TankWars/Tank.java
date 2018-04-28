@@ -1,5 +1,6 @@
 package TankWars;
 
+import static TankWars.Main.WINDOW_WIDTH;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -25,56 +26,65 @@ public class Tank extends Movable implements Observer {
     private int ammo;
     private int lives;
     private int deltaX, deltaY;
-    final int r = 10;
-    private short angle;
+    private int nonCollideX,nonCollideY;
+    private int spawnX,spawnY;
+    final int r = 15;
+    public short angle;
     private KeyMapping keyMap;
     //for collision detection
     protected int xCollide, yCollide;
-    boolean shotsFired, collided;
+    private boolean shotsFired, collided;
+    private int player;
+    long lastShoot = System.currentTimeMillis();
+    final long threshold = 1000;
 
     //constructor
-    public Tank(int x, int y, short angle, BufferedImage image, KeyMapping kmap, int width, int length) {
+    public Tank(int x, int y, short angle,int player, BufferedImage image, KeyMapping kmap, int width, int length) {
 	super(x, y, image, width, length);
 	keys = new HashSet();
 	this.keyMap = kmap;
 	this.angle = angle;
 	this.shotsFired = false;
 	collided = false;
+        this.health = 100;
+        this.spawnX = x;
+        this.spawnY = y;
+        this.lives = 3;
+        this.player = player;
     }
-
+    
     @Override
     public void collide(GameObject gameObject) {
-	collided = true;
-	setXcoord(xCollide);
-	setYcoord(yCollide);
-
     }
 
     @Override
     public void collide(Tank tank) {
-	collided = true;
-	setXcoord(xCollide);
-	setYcoord(yCollide);
+        this.x = nonCollideX;
+        this.y = nonCollideY;
     }
 
     @Override
     public void collide(BreakableWall breakableWall) {
 	collided = true;
-	setXcoord(xCollide);
-	setYcoord(yCollide);
+	
     }
 
     @Override
     public void collide(NormalWall normalWall) {
-	collided = true;
-	setXcoord(xCollide);
-	setYcoord(yCollide);
+	this.x = nonCollideX;
+        this.y = nonCollideY;
     }
-//    
-//    @Override
-//    public void collide(Bullet bullet){
-//        
-//    }
+    
+    @Override
+    public void collide(Bullet bullet){    
+        this.health -= 10;
+            if(health <= 0){
+                --lives;
+                respawn();
+            }
+            bullet.setVisibility(false);
+            System.out.println("Tank's Health: "+ health);
+    }
 //    
 //    @Override
 //    public void collide(BreakableWall breakableWall){
@@ -85,72 +95,17 @@ public class Tank extends Movable implements Observer {
 //    public void collide(PowerUp powerUp){
 //        
 //    }
-//    
-    @Override
-    public Rectangle getHitBox(){
-	return new Rectangle(this.x, this.y, 64, 64);
-    }
-    
-    public void NonCollisionCoord(){
-	xCollide = this.x;
-	yCollide = this.y;
-    }
+//   
     
     @Override
     public void update(Observable o, Object obj) {
 	Controller controller = (Controller) o;
 	keys = controller.getKeys();
-	//MoveTanks();
-	if (keys.contains(keyMap.getRightKey())) {
-	    System.out.println("Right");
-	    this.moveRight();
-	    System.out.println("Right");
-	}
-	if (keys.contains(keyMap.getDownKey())) {
-	    System.out.println("Down");
-	    this.moveDown();
-	    System.out.println("Down");
-	}
-	if (keys.contains(keyMap.getLeftKey())) {
-	    System.out.println("Left");
-	    this.moveLeft();
-	    System.out.println("Left");
-
-	}
-	if (keys.contains(keyMap.getUpKey())) {
-	    System.out.println("UP");
-	    this.moveUp();
-	    System.out.println("UP");
-	}
-	if (keys.contains(keyMap.getShootKey())) {
-
-	}
-	//collision detection
-	if(!collided){
-	    NonCollisionCoord();
-	}else{
-	    collided = false;
-	    
-	}
+        NonCollisionCoord();
+	MoveTanks();
     }
 
-    //getters for coordinates
-    public int getXcoord() {
-	return this.x;
-    }
-
-    public int getYCoord() {
-	return this.y;
-    }
-
-    //setters for coordinates
-    public void setXcoord(int x) {
-	this.x = x;
-    }
-
-    public void setYcoord(int y) {
-	this.y = y;
-    }
+    //getters for coordinate
 
     public void setLives(int lives) {
 	this.lives = lives;
@@ -169,28 +124,34 @@ public class Tank extends Movable implements Observer {
     }
 
     public void shoot() {
-	shotsFired = true;
+	this.shotsFired = true;
+    }
+    public void setShoot(boolean shoot){
+        this.shotsFired  = shoot;
+    }
+    public boolean getShoot(){
+        return this.shotsFired;
     }
 
-    public void moveUp() {
+    public synchronized void moveUp() {
 	deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
 	deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
 	x += deltaX;
 	y += deltaY;
     }
 
-    public void moveDown() {
+    public synchronized void moveDown() {
 	deltaX = (int) Math.round(r * Math.cos(Math.toRadians(angle)));
 	deltaY = (int) Math.round(r * Math.sin(Math.toRadians(angle)));
 	x -= deltaX;
 	y -= deltaY;
     }
 
-    public void moveLeft() {
+    public synchronized void moveLeft() {
 	this.angle -= 10;
     }
 
-    public void moveRight() {
+    public synchronized void moveRight() {
 	this.angle += 10;
     }
 
@@ -208,7 +169,11 @@ public class Tank extends Movable implements Observer {
 	    this.moveLeft();
 	}
 	if (keys.contains(keyMap.getShootKey())) {
-	    this.moveLeft();
+            long current = System.currentTimeMillis();
+            if((current - threshold) > lastShoot){
+	    this.shoot();
+            lastShoot = current;
+            }
 	}
     }
 
@@ -218,7 +183,40 @@ public class Tank extends Movable implements Observer {
 	rotation.rotate(Math.toRadians(angle), this.getImage().getWidth() / 2, this.getImage().getHeight() / 2);
 	Graphics2D graphic2D = (Graphics2D) g;
 	graphic2D.drawImage(this.getImage(), rotation, null);
-
+        //graphic2D.draw(this.getHitBox());
+    }
+    public void NonCollisionCoord(){
+	this.nonCollideX = x;
+	this.nonCollideY = y;
+    }
+    public short getAngle(){
+        return this.angle;
+    }
+    public void respawn(){
+        this.health = 100;
+        this.x = spawnX;
+        this.y = spawnY;
+    }
+    public int getLives(){
+        return this.lives;
+    }
+    public int getHealth(){
+        return this.health;
+    }
+    public int getPlayer(){
+        return this.player;
     }
 
+    @Override
+    public void collide(PowerUp powerUp) {
+	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public int getMiddleX(){
+	return this.getX() + this.getImageWidth() / 2;
+    }
+    
+    public int getMiddleY(){
+	return this.getY() + this.getImageHeight() / 2;
+    }
 }
