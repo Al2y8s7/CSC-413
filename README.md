@@ -1,4 +1,6 @@
-#csc413-03-TankGame- Team 12
+# Tank Wars Game
+
+csc413-03-TankGame- Team 12
 
 Authors: Alvin Nguyen, Moses Martinez
 
